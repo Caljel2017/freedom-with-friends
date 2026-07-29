@@ -1,0 +1,20 @@
+# OS / editor junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+*~
+
+# Local dumps — never commit game binaries
+**/romfs_dump/
+**/exefs_dump/
+**/*.nsp
+**/*.xci
+**/*.nca
+**/*.nso
+**/*.nro
+
+# Large compiled game assets if dropped in locally
+FriendsFreedom/romfs/**/*.zs
+FriendsFreedom/romfs/**/*.bfevfl
+!FriendsFreedom/romfs/**/README.txt

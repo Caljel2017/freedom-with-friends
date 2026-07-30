@@ -123,12 +123,27 @@ def main():
 
     data, labels, entries, base = parse(out)
     print("Patching Freedom labels...")
-    # :020 budgets: 020_a=9, 020_b=13, 020_c=13
-    # Order: Save and end / Test / Keep playing  (Test directly above Keep playing)
-    patch_by_name(data, labels, entries, "020_a", "Save end.")  # 9-char slot (means Save and end)
+    # :020 — Save and end / Test / Keep playing
+    patch_by_name(data, labels, entries, "020_a", "Save end.")  # 9-char slot
     patch_by_name(data, labels, entries, "020_b", "Test.")
-    # 020_c already "Keep playing." in TSkip
     print("  020_c: leave TSkip default (Keep playing.)")
+
+    # :021 — Freedom hub under Test
+    try:
+        patch_by_name(data, labels, entries, "021", "Freedom menu")
+    except ValueError:
+        patch_by_name(data, labels, entries, "021", "FwF options")
+    try:
+        patch_by_name(data, labels, entries, "021_a", "Edit profile.")
+    except ValueError as ex:
+        print("  021_a:", ex)
+        patch_by_name(data, labels, entries, "021_a", "Profile.")
+    # 021_b budget is only 5 chars
+    try:
+        patch_by_name(data, labels, entries, "021_b", "Fly.")
+    except ValueError as ex:
+        print("  021_b:", ex)
+        patch_by_name(data, labels, entries, "021_b", "Go.")
 
     try:
         patch_by_name(data, labels, entries, "013", "Freedom with Friends OK.")
@@ -137,7 +152,8 @@ def main():
 
     out.write_bytes(data)
     (out.parent / "LABELS.txt").write_text(
-        "020_a=Save end. (Save and end)  020_b=Test  020_c=Keep playing\n013=Freedom with Friends OK.\n",
+        "020: Save end. / Test. / Keep playing.\n"
+        "021: Freedom menu → Edit profile. / Fly.\n",
         encoding="utf-8",
     )
     print("Wrote", out)

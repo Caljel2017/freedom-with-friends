@@ -3,12 +3,12 @@ name: Freedom with Friends
 title_id: "01006F8002326000"
 target_version: "2.0.6"
 build_id: "15765149DF53BA41"
-mode: MINUS_TEST_MENU
+mode: FREEDOM_MINUS_HUB
 romfs:
-  EventFlow/System_GameClose.bfevfl: Minus → Test / Save and end / Keep playing (+ save unlock)
-  Message/TalkSys_USen.sarc.zs: labels for those three choices
+  EventFlow/System_GameClose.bfevfl: Minus Save/Test/Keep + Freedom hub (profile/fly) + unlocks
+  Message/TalkSys_USen.sarc.zs: labels
 cheats: 60 FPS + Animation Speed x0.5
 notes:
-  - No Tutorial Skip prologue EventFlows / OpeningMovie / empty RSTB (those black-screened).
-  - If black screen returns: delete romfs/EventFlow and romfs/Message; leave cheats.
+  - No Tutorial Skip prologue pack / empty RSTB (black screen on this Yuzu).
+  - Still impossible: 20 villagers, visitor houses on friend islands, silent auto-join.
   - Friends must be on 2.0.6.

@@ -2,17 +2,15 @@
 
 | Feature | Status |
 |---|---|
-| Minus → Save and end / **Test** / Keep playing | **Installed** |
-| Save unlock (early Minus save) | **Installed** via GameClose |
-| 60 FPS | **Cheats** — enable both codes |
-| Tutorial Skip prologue pack | **Off** — black-screened on this Yuzu install |
+| 60 FPS | **Cheats** — both codes |
+| Minus → Save / **Test** / Keep playing | **Installed** |
+| Test → Edit profile (name + birthday) | **Installed** |
+| Test → Fly to airport | **Installed** |
+| Early Save & End + Orville/airport/designer/UI unlocks | **Installed** (on Minus/Test) |
+| Emote UI + gymnastics reactions | **Installed** |
+| Tutorial Skip prologue EventFlows | **Off** (black-screened here) |
+| 20 villagers | **Impossible** |
+| Visitor house on friend island | **Impossible** |
+| Silent auto-join | **Impossible** |
 
-## Minus menu order
-
-1. **Save end.** (Save and end — short label slot)
-2. **Test**
-3. **Keep playing**
-
-## Rollback
-
-If black screen after first load, delete `romfs/EventFlow` and `romfs/Message`.
+See `HARD_LIMITS.md`.

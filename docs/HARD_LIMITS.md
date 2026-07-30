@@ -1,28 +1,35 @@
-# Limits that LayeredFS cannot change (ACNH 1.0)
+# Limits — ACNH **2.0.6** (Yuzu / LayeredFS)
+
+Things that **still cannot** be done with this mod style, even after updating past 1.0:
 
 ## 20 villagers
 
-**Impossible.** New Horizons allocates **10** villager slots in the save and engine. There is no EventFlow, cheat, or NHSE toggle that expands that to 20 without rewriting the game binary and save format.
+**Impossible.** Engine + save allocate **10** villager slots. No EventFlow / cheat / NHSE option expands that to 20.
 
-Max island villagers: **10**.
+## Visitor house on a friend’s island (Dodo / local visit)
 
-## 60 FPS on pure 1.0.0
+**Not a real resident plot.** Houses belong to residents on the **host save**. Guests cannot get a permanent house via LayeredFS while visiting.
 
-**No verified BID-matched 60FPS patch** for build `7FC1BAFF976AECA4` in the usual FPSLocker / NX-60FPS databases (they track much newer versions).
+## Silent auto-join host island on boot
 
-Yuzu **Ctrl+U** (disable framerate limit) makes ACNH run at double **game speed**, not smooth 60 with normal pacing. Do not use that alone.
+**Impossible** via LayeredFS alone. Still: Orville → Via local play (+ Hamachi / ldn_mitm). See `CONNECTIVITY.md`.
 
-When/if you move to a newer update, use a **Build-ID-matched** 60FPS code + author half-speed animation fix.
+## Full Tutorial Skip EventFlow pack on this Yuzu install
 
-## Visitor house on a friend’s island (Dodo visit)
+**Off by choice.** The prologue EventFlow + OpeningMovie pack black-screened after the first load here. Freedom features are delivered through the Minus menu instead.
 
-**Not a real resident plot.** Houses belong to residents on the **host save** (up to 8 player houses). Wireless/local-play visitors are guests; Tom Nook cannot allocate you a permanent house on their island through LayeredFS.
+## Every reaction on day one
 
-Closest options:
+Emote **UI** + gymnastics set are granted from Minus / Test. Filling the entire reaction wheel still needs per-reaction IDs / NHSE after you have a real save.
 
-- Add a **second resident character** on the host Switch/emulator save (same island, not a Dodo visit)
-- Future `exefs` shared-owner experiments (still stub; see `SHARED_OWNER.md`)
+---
 
-## All reactions on day one
+## Now possible on 2.0.6 (this pack)
 
-Emoticon **UI** is enabled when you open Minus (`EnableEmoticonUI`). Teaching every reaction wheel entry still needs per-reaction grants (villagers / NHSE after you have a save). Full auto-grant on 1.0 EventFlow is incomplete until reaction IDs are fully mapped for this build.
+| Feature | How |
+|---|---|
+| 60 FPS | Cheats — enable **both** `60 FPS` + `Animation Speed x0.5` |
+| Minus Save & End early | `System_GameClose` save unlock |
+| Minus → **Test** Freedom hub | Profile (name + birthday) / Fly to airport |
+| Orville / airport / designer / main UI flags | Set when you open Minus or Test |
+| Emote UI + gymnastics reactions | `EnableEmoticonUI` + `GetGymnasticsEmoticon` |

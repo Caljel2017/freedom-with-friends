@@ -1,2 +1,2 @@
-020_a=Save end. (Save and end)  020_b=Test  020_c=Keep playing
-013=Freedom with Friends OK.
+020: Save end. / Test. / Keep playing.
+021: Freedom menu → Edit profile. / Fly.

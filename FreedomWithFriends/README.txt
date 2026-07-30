@@ -1,10 +1,14 @@
 ﻿# Freedom with Friends — ACNH 2.0.6
 
-## Visitor (on someone else’s island)
+## Solo / host Minus
 
-Minus → first choice = get **one tent** (once). Option disappears after you use it.
-(Label still shows “Save and end” — no custom text overlay.)
+1. **Save and end** — save & quit  
+2. **Keep playing** — profile menu:
+   - **Save and end** — change **name**
+   - **Keep playing** — change **birthday**
 
-## Host / solo
+(No custom text overlay — labels stay vanilla so the menu actually shows.)
 
-Minus → Save and end / Keep playing (Freedom).
+## Visitor
+
+Minus → first choice once = tent; then gone.

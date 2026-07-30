@@ -1,11 +1,17 @@
 # Freedom with Friends — ACNH 2.0.6 Minus (minimal, Yuzu-safe)
-# No Message overlay. No external EventFlow calls (Wherearen/SharePlay/InetClose).
-# Choice2 only on vanilla TalkSys/SYS_CloseMenu:020.
+# No Message overlay (blank menu). Choice2 only on vanilla :020 labels.
+#
+# Solo/host Minus:
+#   Save and end → save & quit
+#   Keep playing → Name / Birthday menu (same vanilla labels again):
+#     Save and end → change name
+#     Keep playing → change birthday
+#
+# Visitor (other island, once): Save and end → get tent; then option gone.
 
 flow Root():
 	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
 	System.EventFlags['cLand:ValidateVillageSave'] = true
-	# Visitor on someone else's island: one-time tent claim as first choice.
 	if (EventFlowSystemActor.NetIsConnected()) and (not EventFlowSystemActor.IsMyVillage()) and (not System.EventFlags['cPlayerTemp:CampInviteRejected']):
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
 		switch EventFlowSystemActor.GeneralTalkChoice2():
@@ -22,7 +28,7 @@ flow Root():
 			case 0:
 				run DoSaveAndEnd()
 			case 1:
-				run FreedomHub()
+				run ProfileMenu()
 
 local flow DoSaveAndEnd():
 	if EventFlowSystemActor.NetIsInviteFriend():
@@ -30,30 +36,22 @@ local flow DoSaveAndEnd():
 	EventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'Root', false, false, false)
 	EventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
 
-flow FreedomHub():
-	System.EventFlags['cPlayer:EnableEmoticonUI'] = true
-	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
-	System.EventFlags['cLand:AirportOpen'] = true
-	System.EventFlags['cPlayer:OdekakeFirstTalk'] = true
-	System.EventFlags['cPlayer:OdekakeTutorial'] = true
-	System.EventFlags['cPlayer:PcMaingameStart'] = true
-	System.EventFlags['cPlayer:PlayerMainUImenuEnable'] = true
-	System.EventFlags['cPlayer:MainmenuConstructLicense'] = true
-	System.EventFlags['cPlayer:GetLicenseRiver'] = true
-	System.EventFlags['cPlayer:GetLicenseCliff'] = true
-	System.EventFlags['cPlayer:UpgradePocket30'] = true
-	System.EventFlags['cPlayer:UpgradePocket40'] = true
-	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
+# Second menu: pick name OR birthday (no "can't save" ping).
+flow ProfileMenu():
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
 	switch EventFlowSystemActor.GeneralTalkChoice2():
 		case 0:
-			EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-			EventFlowSystemActor.SystemRequestChangeStage('cFrontOfAirPort', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+			run EditNameOnly()
 		case 1:
-			EventFlowSystemActor.SoundDuckingOn(41)
-			EventFlowSystemActor.UISoftwareKeyboardHandling('cName', true)
-			EventFlowSystemActor.SoundDuckingOff(41)
-			EventFlowSystemActor.SaveSetFromUIResult('cPlayerName')
-			EventFlowSystemActor.SetTagFromUIResult('cPlayerNameNoGender', 0)
-			EventFlowSystemActor.UIDateHandling('cOpeningBirthday')
-			EventFlowSystemActor.SaveSetFromUIResult('cBirthDay')
+			run EditBirthdayOnly()
+
+local flow EditNameOnly():
+	EventFlowSystemActor.SoundDuckingOn(41)
+	EventFlowSystemActor.UISoftwareKeyboardHandling('cName', true)
+	EventFlowSystemActor.SoundDuckingOff(41)
+	EventFlowSystemActor.SaveSetFromUIResult('cPlayerName')
+	EventFlowSystemActor.SetTagFromUIResult('cPlayerNameNoGender', 0)
+
+local flow EditBirthdayOnly():
+	EventFlowSystemActor.UIDateHandling('cOpeningBirthday')
+	EventFlowSystemActor.SaveSetFromUIResult('cBirthDay')

@@ -1,0 +1,10 @@
+Minus menu labels (TalkSys/SYS_CloseMenu):
+  011 choice0 = Save and end; choice1 = Test
+  020 choice0 = Test; choice1 = Save and end
+  021 title = FwF test menu
+  021 choice0 = Status -> 013 (+ 026 if save flag on)
+  021 choice1 = Tips -> 027
+  tips_label=027
+  013 = Freedom with Friends on.
+  026 = Save flag: unlocked
+  027 = Hamachi local-play tip

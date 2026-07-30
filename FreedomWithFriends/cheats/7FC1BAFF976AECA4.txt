@@ -1,0 +1,25 @@
+# Freedom with Friends — ACNH 1.0.0
+# Build ID: 7FC1BAFF976AECA4
+#
+# Enable cheats in Yuzu: Properties → Cheats (or load/<title>/cheats).
+#
+# --- 60 FPS ---
+# Pure 1.0.0 has no verified public 60FPS + half-speed animation cheat
+# matched to BID 7FC1BAFF976AECA4 in the common FPSLocker / NX-60FPS DBs
+# (those packs target much newer builds).
+#
+# Do NOT only press Ctrl+U (uncap FPS) in Yuzu: ACNH logic is frame-tied,
+# so the whole game (walk, time, cutscenes) runs ~2x fast.
+#
+# If you later update the game, use a BID-matched 60FPS patch from
+# FPSLocker-Warehouse / NX-60FPS-RES-GFX-Cheats for THAT build, plus
+# animation half-speed when the author provides it.
+#
+# --- Villagers ---
+# Engine hard-cap is 10 villagers. 20 is not possible via cheats/LayeredFS.
+#
+# --- Save / profile ---
+# Prefer romfs EventFlow System_GameClose (Minus → Save & End + Profile).
+
+[Freedom with Friends — cheats slot]
+580F0000 00000000

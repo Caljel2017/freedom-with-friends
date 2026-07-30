@@ -1,0 +1,18 @@
+flow Root():
+	# Freedom with Friends — 1.0-safe flags for airport / phone
+	# Shared-owner multiplayer (Nook Stop, mailbox, houses-as-visitor) needs exefs
+	# patches — see docs/SHARED_OWNER.md and exefs/*.pchtxt.disabled
+
+	System.EventFlags['cLand:AirportOpen'] = true
+	System.EventFlags['cPlayer:Activate_WebService'] = true
+
+	System.EventFlags['cPlayer:PlayerMainUImenuEnable'] = true
+	System.EventFlags['cPlayer:MainmenuMap'] = true
+	System.EventFlags['cPlayer:MainmenuCall'] = true
+	System.EventFlags['cPlayer:MainmenuFriendList'] = true
+	System.EventFlags['cPlayer:FriendListMainSwitch'] = true
+	System.EventFlags['cPlayer:MainmenuBank'] = true
+	System.EventFlags['cPlayer:MainmenuAchievement'] = true
+
+	System.EventFlags['cPlayer:UpgradePocket30'] = true
+	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true

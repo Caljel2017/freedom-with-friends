@@ -1,0 +1,16 @@
+# Pack contents version
+name: Freedom with Friends
+title_id: "01006F8002326000"
+target_version: "2.0.6"
+build_id: "15765149DF53BA41"
+mode: TUTORIAL_SKIP_2_0_6
+romfs:
+  source: ACNH Tutorial Skip v0.2 (ShrineFox) — built for modern / 2.0.x
+  includes: EventFlow prologue pack + short OpeningMovie + empty RSTB
+cheats:
+  - 15765149DF53BA41.txt  # 60 FPS + Animation Speed x0.5
+notes:
+  - Retargeted from 1.0 after user updated. Old 1.0 EventFlows removed.
+  - Friends must also be on 2.0.6 for multiplayer.
+  - Start a NEW game for Tutorial Skip to apply.
+  - Enable 60 FPS and Animation x0.5 together in Yuzu Cheats.

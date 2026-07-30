@@ -1,85 +1,82 @@
-# ACNH Friends Freedom
+# Freedom with Friends
 
-Yuzu / Ryujinx (LayeredFS + exefs) mod pack for **Animal Crossing: New Horizons**.
+Yuzu / Ryujinx mod pack for **Animal Crossing: New Horizons**.
 
-**Title ID:** `01006F8002326000`
+**Title ID:** `01006F8002326000`  
+**1.0.0 Build ID:** `7FC1BAFF976AECA4`  
+**Default mode:** **save-unlock 1.0** + in-game Minus **Test** menu (`System_GameClose` + `TalkSys_USen` — not Tutorial Skip / not airport pack)
 
-## Goals
+## Status
 
 | Feature | Status |
 |---|---|
-| Visitors can terraform / redesign with friends in multiplayer | **Scaffolded** — needs version-specific `exefs` code patches (see `docs/TECHNICAL.md`) |
-| Creative “do anything” session with friends | **Scaffolded** — permission / lock checks are host+guest client-side |
-| Skip Dodo Airlines connecting cutscene | **Scaffolded** — needs `romFs` EventFlow edits for your game version |
+| Boot-safe on 1.0.0 | Test after install; if black screen, remove `romfs/EventFlow` and `romfs/Message` (see docs) |
+| Save anytime (tutorial/prologue) | **On** — Minus → **Save and end** |
+| Minus → **Test** submenu | **On** — Status / Tips (TalkSys overlay) |
+| Prologue / getaway skip | **Off forever** (full Tutorial Skip black-screens 1.0) |
+| Fly anytime via Orville | **Off** — airport pack black-screened; backup only |
+| Silent auto-join on boot | **Impossible** (LayeredFS cannot skip Orville) |
+| Auto-teleport to Orville / auto LDN join | **Impossible** via LayeredFS; use Hamachi guest assistant instead |
+| Visitor terraform / shared owner | Disabled exefs stub only |
+| Cheats slot 1.0.0 | Slot only — no verified save-unlock cheat |
+| LAN / ldn_mitm / Hamachi | `docs/CONNECTIVITY.md`, `scripts/Setup-Connectivity.ps1` |
 
-Working ARM64 / EventFlow binaries are **not invented here**. Fake offsets crash the game or corrupt saves. This repo ships the correct emulator layout, installers, and a clear patch plan so real patches can be dropped in once reverse-engineered against your dump.
-
-> **Console note (3.0+):** Nintendo’s free **Slumber Islands** feature already allows collaborative terraforming with friends online. That uses Nintendo Switch Online and usually does **not** work the same way over Ryujinx LDN. This mod targets classic island visit / local-wireless sessions on emulators.
-
-## Quick install
-
-### Yuzu / forks (Suyu, Sudachi, etc.)
+## Install
 
 ```powershell
+.\scripts\Build-SaveUnlock.ps1 -InstallYuzu
+# or if already built:
 .\install\Install-Yuzu.ps1
 ```
 
-Or copy `FriendsFreedom` into:
+## In-game: controller Minus → Test
 
-`%APPDATA%\yuzu\load\01006F8002326000\FriendsFreedom\`
+1. Enable the **FreedomWithFriends** mod in Yuzu for ACNH 1.0.
+2. Load the game until you can move the player.
+3. Press the **Nintendo Switch controller Minus (−)** button (not Windows Ctrl+-).
+4. Choose **Test**.
+5. Submenu: **Status** or **Tips**
+6. From the same Minus menu, **Save and end.** still works during prologue.
 
-(Use your fork’s `load` folder if the app name differs.)
+Exact path (normal stages): **Minus (−)** → **Ready to wrap things up for now?** → **Test.** → **FwF test menu** → **Status** | **Tips**
 
-### Ryujinx / forks
+On mystery tour / photo studio: **Minus (−)** → … → **Test.** (first) | **Save and end.**
+
+## Rollback (black screen)
+
+1. Delete `%APPDATA%\yuzu\load\01006F8002326000\FreedomWithFriends\romfs\EventFlow\System_GameClose.bfevfl`
+2. Delete `%APPDATA%\yuzu\load\01006F8002326000\FreedomWithFriends\romfs\Message` (TalkSys overlay)
+3. Or delete the whole `romfs\EventFlow` / `romfs\Message` folders under that mod
+4. Restart Yuzu / reload the game
+
+## Hamachi join
+
+1. For friends: Hamachi + ldn_mitm, then Orville → **Via local play** (vanilla Orville gates still apply until a safe fly unlock exists).
 
 ```powershell
-.\install\Install-Ryujinx.ps1
+.\scripts\AutoJoin-HamachiHost.ps1 -Role Host
+.\scripts\AutoJoin-HamachiHost.ps1 -Role Guest
 ```
 
-Or copy `FriendsFreedom` into:
+Details: [`docs/WHY_NO_EVENTFLOW.md`](docs/WHY_NO_EVENTFLOW.md), [`docs/CONNECTIVITY.md`](docs/CONNECTIVITY.md).
 
-`%APPDATA%\Ryujinx\mods\contents\01006F8002326000\FriendsFreedom\`
+## Optional Windows fallback
 
-Then enable the mod on the game (Right-click game → Manage / Open mods directory).
+If you need an external checklist without touching romFS UI:
 
-### Multiplayer on emulator
-
-1. Same **game version** for every player (mixing updates breaks joins).
-2. Same **mod pack** on every client (host + guests).
-3. Use **local wireless / LDN** (Ryujinx LDN builds, or your fork’s LDN). Talk to Orville → fly / invite → **Via local play**.
-4. Back up saves before enabling any exefs / EventFlow patches.
-
-## Repo layout
-
-```
-FriendsFreedom/          ← drop-in mod folder for emulators
-  exefs/                 ← .pchtxt / .ips code patches go here
-  romfs/                 ← EventFlow / romFS overrides (ACNH often wants romFs on Atmosphere)
-  cheats/                ← optional per-build cheat texts
-  README.txt
-docs/
-  FEATURES.md
-  TECHNICAL.md
-install/
-  Install-Yuzu.ps1
-  Install-Ryujinx.ps1
-scripts/
-  New-PatchStub.ps1
+```powershell
+.\scripts\Start-ModTestMenu.ps1 -ShowNow
 ```
 
-## Requirements
+Controller Minus → Test is the intended path; the PowerShell helper is optional only.
 
-- A legally obtained ACNH dump of a known version (e.g. 2.0.6 / 3.0.x)
-- Yuzu or Ryujinx (or a maintained fork) with LayeredFS mods enabled
-- For multiplayer: LDN-capable build + matching versions across friends
+## Do not install full Tutorial Skip
 
-## Next step to make features live
+```powershell
+# AVOID on pure 1.0 — black screen + grass flash:
+# .\scripts\Build-FromRomfs.ps1 -FromTutorialSkipRelease
+```
 
-See `docs/TECHNICAL.md`. In short:
+## Credits
 
-1. Dump your exact build ID from the emulator.
-2. Reverse the visitor permission / terraform lock checks → write `exefs/*.pchtxt`.
-3. Decompile airport arrival EventFlows → skip or shorten the connecting demo → compile back into `romfs/EventFlow/`.
-4. Re-run the install script and test with two LDN clients.
-
-If you have a dumped game folder and tell me the **exact version + build ID**, we can work the EventFlow / patch stubs against that next.
+Prologue EventFlow patterns adapted from ShrineFox **ACNH Tutorial Skip** v0.2 (not shipped as that pack).

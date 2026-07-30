@@ -1,0 +1,95 @@
+flow LocalClose():
+    if EventFlowSystemActor.NetIsInviteFriend():
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:001', true)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run RetryLock()
+    else:
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:004', true)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.MessageLockNext(1)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:005', false)
+            EventFlowSystemActor.NetDemoLock(1)
+            EventFlowSystemActor.MessageUnlockNext()
+            if EventFlowSystemActor.CheckErrorType(2):
+                EventFlowSystemActor.MessageLockNext(2)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:007', false)
+                EventFlowSystemActor.NetForceQuitSession()
+                EventFlowSystemActor.MessageUnlockNext()
+                EventFlowSystemActor.MessageSuspend()
+                if not EventFlowSystemActor.MessageUseBCancel():
+                    EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
+            else:
+                EventFlowSystemActor.MessageSuspend()
+                EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
+
+flow NetClose():
+    if EventFlowSystemActor.NetMode() in (0, 1):
+        run LocalClose()
+    else:
+        run LocalClose()
+
+flow RetryLock():
+    EventFlowSystemActor.MessageLockNext(1)
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:006', false)
+    EventFlowSystemActor.NetDemoLock(2)
+    EventFlowSystemActor.MessageUnlockNext()
+    if EventFlowSystemActor.CheckErrorType(2):
+        EventFlowSystemActor.MessageLockNext(2)
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:008', false)
+        EventFlowSystemActor.NetForceQuitSession()
+        EventFlowSystemActor.MessageUnlockNext()
+        EventFlowSystemActor.MessageSuspend()
+        if not EventFlowSystemActor.MessageUseBCancel():
+            EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
+    else:
+        EventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
+
+flow TestMenu():
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:021', false)
+    switch EventFlowSystemActor.GeneralTalkChoice2():
+        case 0:
+            run TestStatus()
+        case 1:
+            run TestLocalTips()
+        default:
+            return
+
+local flow TestStatus():
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
+
+local flow TestLocalTips():
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
+
+flow Root():
+    if EventFlowSystemActor.NetIsConnected():
+        if EventFlowSystemActor.IsMyVillage():
+            if EventFlowSystemActor.NetHasVisitor():
+                run NetClose()
+            else:
+                run Sub_grp_Event24()
+        else:
+            run NetClose()
+    else:
+        run Sub_grp_Event24()
+
+local flow Sub_grp_Event24():
+    # Freedom with Friends 1.0 — allow minus-menu save/quit during prologue.
+    System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
+    if EventFlowSystemActor.IsPlayerBirthdayRoom():
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:019', false)
+    elif EventFlowSystemActor.IsSharePlay(1):
+        run System_SharePlay_Entry::ExitSharePlay()
+    else:
+        if (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland')):
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:011', true)
+        else:
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
+        switch EventFlowSystemActor.GeneralTalkChoice2():
+            case 0:
+                EventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'Root', false, false, false)
+                EventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+            case 1:
+                run TestMenu()
+            default:
+                return

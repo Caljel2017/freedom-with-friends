@@ -14,7 +14,10 @@ Desktop.ini
 **/*.nso
 **/*.nro
 
-# Large compiled game assets if dropped in locally
-FriendsFreedom/romfs/**/*.zs
-FriendsFreedom/romfs/**/*.bfevfl
-!FriendsFreedom/romfs/**/README.txt
+# Large optional dumps — never commit full game extracts
+tools/romfs_dump/
+source/romfs_dump/
+# Keep shipped EventFlow .bfevfl / OpeningMovie in FreedomWithFriends/romfs
+tools/ACNH-Tutorial-Skip-ref/
+tools/tutorial-skip-release/
+tools/*.zip

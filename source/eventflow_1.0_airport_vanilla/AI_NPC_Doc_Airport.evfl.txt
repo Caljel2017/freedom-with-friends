@@ -1,0 +1,6 @@
+flow Root():
+    if System.EventFlags['cLandTemp:DocReturnFromIsland']:
+        MainNpc.NpcChangeAIState('cDocReturn', '', '', '', false, true)
+    else:
+        MainNpc.NpcChangeAIState('cWait', '', '', '', false, true)
+

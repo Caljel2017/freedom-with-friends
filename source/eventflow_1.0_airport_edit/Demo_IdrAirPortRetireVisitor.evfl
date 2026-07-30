@@ -1,0 +1,8 @@
+# Freedom with Friends 1.0 — minimal visitor-leave cutscene
+# Keeps NetDemoNextStep for host/guest sync; strips dialogue / rails.
+
+flow Root():
+    if EventFlowSystemActor.NetIsDemoPlayer():
+        EventFlowSystemActor.NetDemoNextStep('cLeaveVisitor')
+    else:
+        EventFlowSystemActor.NetDemoNextStep('cSeeOffVisitor')

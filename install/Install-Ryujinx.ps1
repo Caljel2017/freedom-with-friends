@@ -1,9 +1,9 @@
-# Install Friends Freedom into Ryujinx (or a fork that uses mods\contents).
+# Install Freedom with Friends into Ryujinx (or a fork that uses mods\contents).
 param(
-    [string]$ModSource = (Join-Path $PSScriptRoot "..\FriendsFreedom"),
+    [string]$ModSource = (Join-Path $PSScriptRoot "..\FreedomWithFriends"),
     [string]$EmulatorName = "Ryujinx",
     [string]$TitleId = "01006F8002326000",
-    [string]$ModName = "FriendsFreedom"
+    [string]$ModName = "FreedomWithFriends"
 )
 
 $ErrorActionPreference = "Stop"
@@ -35,8 +35,9 @@ if (Test-Path $dest) {
 }
 
 Copy-Item -Recurse -Force $modSource $dest
-Write-Host "Installed Friends Freedom to:"
+Write-Host "Installed Freedom with Friends to:"
 Write-Host "  $dest"
 Write-Host ""
-Write-Host "Right-click ACNH in Ryujinx → manage mods / open mods directory and confirm FriendsFreedom is present."
-Write-Host "Use an LDN-capable build for multiplayer. Matching game version required for all players."
+Write-Host "Right-click ACNH in Ryujinx → manage mods / open mods directory and confirm FreedomWithFriends is present."
+Write-Host "Multiplayer: ..\scripts\Setup-Connectivity.ps1 -Mode Hamachi   (or SameLAN / RyuLDN)"
+Write-Host "Use Via local play at Dodo Airlines. Matching game version required for all players."

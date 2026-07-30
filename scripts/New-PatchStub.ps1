@@ -1,4 +1,4 @@
-# Create a versioned .pchtxt stub under FriendsFreedom/exefs.
+# Create a versioned .pchtxt stub under FreedomWithFriends/exefs.
 param(
     [Parameter(Mandatory = $true)]
     [string]$BuildId,
@@ -6,7 +6,7 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$GameVersion,
 
-    [string]$OutDir = (Join-Path $PSScriptRoot "..\FriendsFreedom\exefs")
+    [string]$OutDir = (Join-Path $PSScriptRoot "..\FreedomWithFriends\exefs")
 )
 
 $ErrorActionPreference = "Stop"
@@ -18,16 +18,16 @@ if ($build.Length -lt 16) {
 
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 $safeVersion = ($GameVersion -replace "[^\w\.\-]", "_")
-$outFile = Join-Path $OutDir "FriendsFreedom_$safeVersion.pchtxt"
+$outFile = Join-Path $OutDir "FreedomWithFriends_$safeVersion.pchtxt"
 
 @"
 @nsobid-$build
-# Friends Freedom — ACNH multiplayer creative / terraform unlocks
-# Game version: $GameVersion
+# Freedom with Friends — ACNH $GameVersion
 # Build ID: $build
+# Scope: friend terraform / creative permission patches
+# Related romfs features (fly anytime, random island, cutscene skip): see docs/
 #
-# STATUS: STUB ONLY — replace the example lines with real patched instructions
-# discovered against this exact build. Do not enable guessed offsets.
+# STATUS: STUB ONLY — replace with real offsets for this build. No guessing.
 
 @flag print_values
 @flag offset_shift 0x100

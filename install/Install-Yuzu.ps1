@@ -1,9 +1,9 @@
-# Install Friends Freedom into Yuzu (or a fork that uses the same load layout).
+# Install Freedom with Friends into Yuzu (or a fork that uses the same load layout).
 param(
-    [string]$ModSource = (Join-Path $PSScriptRoot "..\FriendsFreedom"),
+    [string]$ModSource = (Join-Path $PSScriptRoot "..\FreedomWithFriends"),
     [string]$EmulatorName = "yuzu",
     [string]$TitleId = "01006F8002326000",
-    [string]$ModName = "FriendsFreedom"
+    [string]$ModName = "FreedomWithFriends"
 )
 
 $ErrorActionPreference = "Stop"
@@ -36,8 +36,20 @@ if (Test-Path $dest) {
 }
 
 Copy-Item -Recurse -Force $modSource $dest
-Write-Host "Installed Friends Freedom to:"
+
+# Yuzu also reads cheats from load/<title>/cheats when present beside mods;
+# copy build-id cheat next to the title load root for easier toggles.
+$cheatSrc = Join-Path $modSource "cheats"
+$cheatDest = Join-Path $root "load\$TitleId\cheats"
+if (Test-Path $cheatSrc) {
+    New-Item -ItemType Directory -Force -Path $cheatDest | Out-Null
+    Copy-Item -Force (Join-Path $cheatSrc "*") $cheatDest
+}
+
+Write-Host "Installed Freedom with Friends to:"
 Write-Host "  $dest"
+Write-Host "Cheats (if any): $cheatDest"
 Write-Host ""
 Write-Host "Enable the mod for Animal Crossing: New Horizons in $([IO.Path]::GetFileName($root))."
+Write-Host "Multiplayer: .\scripts\Setup-Connectivity.ps1 -Mode Hamachi"
 Write-Host "Every friend needs the same game version and this same mod folder."

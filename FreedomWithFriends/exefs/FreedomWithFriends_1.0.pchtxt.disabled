@@ -1,0 +1,39 @@
+@nsobid-7FC1BAFF976AECA4
+# Freedom with Friends — ACNH 1.0.0 shared-owner / visitor permissions
+# Build ID: 7FC1BAFF976AECA4
+#
+# GOAL: while on a host island (local play / Hamachi / ldn_mitm), every client
+# treats the local player as island owner/resident for:
+#   - Nook Stop / Miles redemption
+#   - terraforming / place / dig (where those systems exist)
+#   - mailbox access against the HOST island villager mail
+#
+# NOT IN SCOPE for exefs alone:
+#   - spawning permanent visitor houses/plots on the host save
+#   - silent auto-join without Orville (see scripts/AutoJoin-HamachiHost.ps1)
+#
+# STATUS: STUB — do not @enabled guessed offsets (save corruption / desync risk).
+# Enable this file (rename off .disabled) only after real 1.0 offsets are filled.
+# Every multiplayer client must use the same patch set.
+
+@flag print_values
+@flag offset_shift 0x100
+
+# @enabled Force IsIslandOwner / resident true
+# <offset> mov w0, #1
+# <offset> ret
+
+# @enabled Allow Nook Stop / Miles machine as visitor
+# <offset> nop
+
+# @enabled Allow mailbox open / villager mail on host island
+# <offset> nop
+
+# @enabled Allow host terraform / place while visitors present
+# <offset> nop
+
+# @enabled Allow visitor terraform / place / dig
+# <offset> nop
+
+# @enabled Relax best-friend tool locks
+# <offset> nop

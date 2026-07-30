@@ -1,0 +1,19 @@
+﻿# Freedom with Friends — ACNH 2.0.6
+# Title ID: 01006F8002326000
+# Build ID: 15765149DF53BA41
+#
+# Enable in Yuzu: right-click game → Properties → Cheats
+# Enable BOTH 60 FPS and Animation Speed x0.5 together (otherwise game runs too fast).
+# Credits: OblivionReign / community cheat DB (GBAtemp)
+
+[60 FPS]
+01100000 00029F24 00000001
+
+[Animation Speed x0.5]
+04000000 043BC3C0 3f000000
+
+[30 FPS (disable 60)]
+01100000 00029F24 00000002
+
+[Animation Speed x1 (default)]
+04000000 043BC3C0 3f800000

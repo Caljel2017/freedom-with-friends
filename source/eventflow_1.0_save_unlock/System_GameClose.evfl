@@ -1,0 +1,115 @@
+# Freedom with Friends — 1.0 Minus menu
+# From tools/romfs_dump_1.0 System_GameClose.bfevfl
+# - Unlock Save & End during prologue (no ValidatePlayerSaveFlag block)
+# - Choice1: edit player name + birthday (persists on Save & End / autosave)
+# - On open: enable emoticon UI + airport/main-game save flags (session)
+# Do NOT call Mod_ flows or other EventFlow files from here.
+# Message overlay optional: without it, choice1 label stays vanilla text.
+
+flow LocalClose():
+	if EventFlowSystemActor.NetIsInviteFriend():
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:001', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run RetryLock()
+	else:
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:004', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.MessageLockNext(1)
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:005', false)
+			EventFlowSystemActor.NetDemoLock(1)
+			EventFlowSystemActor.MessageUnlockNext()
+			if EventFlowSystemActor.CheckErrorType(2):
+				EventFlowSystemActor.MessageLockNext(2)
+				EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:007', false)
+				EventFlowSystemActor.NetForceQuitSession()
+				EventFlowSystemActor.MessageUnlockNext()
+				EventFlowSystemActor.MessageSuspend()
+				if not EventFlowSystemActor.MessageUseBCancel():
+					EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
+			else:
+				EventFlowSystemActor.MessageSuspend()
+				EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
+
+flow NetClose():
+	if EventFlowSystemActor.NetMode() in (0, 1):
+		run LocalClose()
+	else:
+		run LocalClose()
+
+flow RetryLock():
+	EventFlowSystemActor.MessageLockNext(1)
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:006', false)
+	EventFlowSystemActor.NetDemoLock(2)
+	EventFlowSystemActor.MessageUnlockNext()
+	if EventFlowSystemActor.CheckErrorType(2):
+		EventFlowSystemActor.MessageLockNext(2)
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:008', false)
+		EventFlowSystemActor.NetForceQuitSession()
+		EventFlowSystemActor.MessageUnlockNext()
+		EventFlowSystemActor.MessageSuspend()
+		if not EventFlowSystemActor.MessageUseBCancel():
+			EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
+	else:
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
+
+flow Root():
+	if EventFlowSystemActor.NetIsConnected():
+		if EventFlowSystemActor.IsMyVillage():
+			if EventFlowSystemActor.NetHasVisitor():
+				run NetClose()
+			else:
+				run Sub_grp_Event24()
+		else:
+			run NetClose()
+	else:
+		run Sub_grp_Event24()
+
+# Name + birthday; written into player data, kept when you Save & End.
+local flow EditNameAndBirthday():
+	EventFlowSystemActor.SoundDuckingOn(41)
+	EventFlowSystemActor.UISoftwareKeyboardHandling('cName', true)
+	EventFlowSystemActor.SoundDuckingOff(41)
+	EventFlowSystemActor.SaveSetFromUIResult('cPlayerName')
+	EventFlowSystemActor.SetTagFromUIResult('cPlayerNameNoGender', 0)
+	EventFlowSystemActor.UIDateHandling('cOpeningBirthday')
+	EventFlowSystemActor.SaveSetFromUIResult('cBirthDay')
+
+local flow DoSaveAndEnd():
+	EventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'Root', false, false, false)
+	EventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+
+# Session unlocks so Minus save + Orville day-0 gates ease after this menu opens.
+local flow ApplyFreedomSessionFlags():
+	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
+	System.EventFlags['cLand:ValidateVillageSave'] = true
+	System.EventFlags['cPlayer:EnableEmoticonUI'] = true
+	System.EventFlags['cLand:AirportOpen'] = true
+	System.EventFlags['cPlayer:OdekakeFirstTalk'] = true
+	System.EventFlags['cPlayer:OdekakeTutorial'] = true
+	System.EventFlags['cPlayer:PcMaingameStart'] = true
+	System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
+	# Day counter used by Orville "stick with the others" gate (int flag).
+	System.EventFlags['cLand:VillageDaysCount'] = 2
+
+local flow Sub_grp_Event24():
+	run ApplyFreedomSessionFlags()
+	if EventFlowSystemActor.IsPlayerBirthdayRoom():
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:019', false)
+	elif EventFlowSystemActor.IsSharePlay(1):
+		run System_SharePlay_Entry::ExitSharePlay()
+	elif (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland')):
+		# :011 — choice0 Save and end / choice1 Profile (name+birthday)
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:011', true)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0:
+				run DoSaveAndEnd()
+			case 1:
+				run EditNameAndBirthday()
+	else:
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0:
+				run EditNameAndBirthday()
+			case 1:
+				run DoSaveAndEnd()

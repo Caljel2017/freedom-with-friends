@@ -1,0 +1,9 @@
+# Freedom with Friends 1.0 — minimal visitor-arrive cutscene
+# Keeps net demo sync steps; strips dialogue / rail / emote padding.
+
+flow Root():
+    EventFlowSystemActor.NetDemoNextStep('cArriveVisitor')
+    EventFlowSystemActor.NetWaitDemo('cVisitorArrive')
+    EventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.PlayReport('cVisitFriend', 0)
+    EventFlowSystemActor.ReturnStage('', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)

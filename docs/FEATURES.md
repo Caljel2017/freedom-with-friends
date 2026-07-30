@@ -1,22 +1,17 @@
-﻿# Features (ACNH **2.0.6** · BID `15765149DF53BA41`)
+﻿# Features (ACNH **2.0.6**)
 
-| Feature | Status |
+## Minus menu fix (blank GUI)
+
+Cause: custom `TalkSys` Message overlay + `Choice3` hid the HUD then never drew a dialog.
+
+Fix: **removed Message overlay**; Minus uses vanilla **Save and end / Keep playing** (`Choice2`).
+
+| Choice (on screen) | What it does |
 |---|---|
-| Minus → Save / Test / Keep + Profile / Fly | **Fixed** — lighter unlocks; own-island menu even with visitors |
-| 60 FPS | Cheats — both codes |
-| **Live on a friend’s island** (real tent + Nook/Isabelle/Nook Stop) | **Guide** — second Yuzu profile as co-resident on the **host save** (`docs/LIVE_ON_HOST_ISLAND.md`) |
-| Dodo visit tent / visitor owner powers | Still impossible without exefs offsets |
+| Save and end | Save & quit |
+| Keep playing | Opens Freedom hub (unlocks + name/birthday, then Save= Fly / Keep= stay) |
+| B cancel | Dismiss |
 
-## Minus fix (2026-07-29)
+Only `romfs/EventFlow/System_GameClose.bfevfl` is installed (no Message).
 
-- Removed `GetGymnasticsEmoticon` from every Minus open (could hang the menu)
-- Own island always opens Freedom menu even if friends are visiting
-- Heavy unlocks run when you open **Test**
-
-## Live on host island
-
-```powershell
-.\scripts\Prepare-SecondResident.ps1
-```
-
-See `LIVE_ON_HOST_ISLAND.md`.
+Live on host island: `docs/LIVE_ON_HOST_ISLAND.md`

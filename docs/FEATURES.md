@@ -2,24 +2,19 @@
 
 | Feature | Status |
 |---|---|
-| Boot with mod enabled | **Fixed** — all romfs overlays removed |
-| 60 FPS | **Cheats** — enable `60 FPS` + `Animation Speed x0.5` |
-| Tutorial Skip / Minus Freedom menu | **Off** — EventFlow + Movie black-screened after first load |
+| Minus → **Test** / Save and end / Keep playing | **Installed** |
+| Save unlock (early Minus save) | **Installed** via GameClose |
+| 60 FPS | **Cheats** — enable both codes |
+| Tutorial Skip prologue pack | **Off** — black-screened on this Yuzu install |
 
-## Black-screen fix (confirmed)
+## Minus menu
 
-With **FreedomWithFriends** enabled, the game hung after the first loading screen.
-With the mod disabled, it booted.
+`System_GameClose` + TalkSys label overlay only (no Tutorial Skip EventFlows, no empty RSTB).
 
-Removed from `romfs/`:
-- All Tutorial Skip `EventFlow/*.bfevfl`
-- `Movie/OpeningMovie.webm`
-- Empty `ResourceSizeTable` (already removed earlier)
+**Test** shows a short “Freedom with Friends OK.” ping — expand later.
 
-Safe pack = **cheats only** (+ disabled exefs stub). Mod can stay enabled.
+## Rollback
 
-## How to use
-
-1. Leave **FreedomWithFriends** enabled
-2. Optional: turn on both 60 FPS cheat codes in Yuzu
-3. Play normally (full tutorial until a real save exists)
+If the game black-screens after the first load again, delete:
+- `romfs/EventFlow/System_GameClose.bfevfl`
+- `romfs/Message/TalkSys_USen.sarc.zs`

@@ -1,7 +1,8 @@
-# Freedom with Friends — ACNH 2.0.6 Minus menu
-# Base: ACNH-Tutorial-Skip-ref System_GameClose (modern / 2.0.x)
-# Adds: save unlock, Profile (name+birthday), Airport warp, session unlocks
-# Labels: TalkSys/SYS_CloseMenu overlay (020 Freedom / Save; 021 Profile / Airport)
+# Freedom with Friends — ACNH 2.0.6 Minus menu (minimal)
+# Base: modern Tutorial Skip System_GameClose
+# Minus → Save and end / Keep playing / Test
+# Labels: TalkSys SYS_CloseMenu :020_a/_b/_c (Message overlay)
+# Do NOT ship Tutorial Skip prologue EventFlows or empty RSTB with this file.
 
 flow DreamClose():
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:028', false)
@@ -106,67 +107,14 @@ local flow DoSaveAndEnd():
 	EventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'Root', false, false, false)
 	EventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
 
-local flow EditNameAndBirthday():
-	EventFlowSystemActor.SoundDuckingOn(41)
-	EventFlowSystemActor.UISoftwareKeyboardHandling('cName', true)
-	EventFlowSystemActor.SoundDuckingOff(41)
-	EventFlowSystemActor.SaveSetFromUIResult('cPlayerName')
-	EventFlowSystemActor.SetTagFromUIResult('cPlayerNameNoGender', 0)
-	EventFlowSystemActor.UIDateHandling('cOpeningBirthday')
-	EventFlowSystemActor.SaveSetFromUIResult('cBirthDay')
-
-# Warp to airport apron / Orville area (same stage Tutorial Skip uses after landing).
-local flow GoToAirport():
-	EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-	EventFlowSystemActor.SystemRequestChangeStage('cFrontOfAirPort', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-
-# Freedom hub — Profile / Airport (labels via Message overlay).
-flow FreedomMenu():
-	run ApplyFreedomUnlocks()
-	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:021', false)
-	switch EventFlowSystemActor.GeneralTalkChoice2():
-		case 0:
-			run EditNameAndBirthday()
-		case 1:
-			run GoToAirport()
-
-local flow ApplyFreedomUnlocks():
-	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
-	System.EventFlags['cLand:ValidateVillageSave'] = true
-	System.EventFlags['cPlayer:EnableEmoticonUI'] = true
-	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
-	System.EventFlags['cLand:AirportOpen'] = true
-	System.EventFlags['cPlayer:OdekakeFirstTalk'] = true
-	System.EventFlags['cPlayer:OdekakeTutorial'] = true
-	System.EventFlags['cPlayer:PcMaingameStart'] = true
-	System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
-	System.EventFlags['cLand:VillageDaysCount'] = 3
-	System.EventFlags['cPlayer:PlayerMainUImenuEnable'] = true
-	System.EventFlags['cPlayer:PlayerEnableEating'] = true
-	System.EventFlags['cPlayer:MainUiClockEnable'] = true
-	System.EventFlags['cPlayer:MainmenuEncyclopedia'] = true
-	System.EventFlags['cPlayer:MainmenuCall'] = true
-	System.EventFlags['cPlayer:MainmenuMap'] = true
-	System.EventFlags['cPlayer:MainmenuMydesign'] = true
-	System.EventFlags['cPlayer:MainmenuBank'] = true
-	System.EventFlags['cPlayer:MainmenuOnlineShopping'] = true
-	System.EventFlags['cPlayer:MainmenuAchievement'] = true
-	System.EventFlags['cPlayer:MainmenuFriendList'] = true
-	System.EventFlags['cPlayer:FriendListMainSwitch'] = true
-	System.EventFlags['cPlayer:MainmenuChatLog'] = true
-	System.EventFlags['cPlayer:MainmenuTips'] = true
-	System.EventFlags['cPlayer:MainmenuConstructLicense'] = true
-	System.EventFlags['cPlayer:GetLicenseRiver'] = true
-	System.EventFlags['cPlayer:GetLicenseCliff'] = true
-	System.EventFlags['cPlayer:Activate_WebService'] = true
-	System.EventFlags['cPlayer:UpgradePocket30'] = true
-	System.EventFlags['cPlayer:UpgradePocket40'] = true
-	# Emote wheel UI + gymnastics set (full villager reaction list needs NHSE / mapped IDs).
-	EventFlowSystemActor.GetGymnasticsEmoticon()
+# Simple Test submenu — status ping (expand later without touching boot packs).
+flow TestMenu():
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
 
 local flow Sub_grp_Event24():
-	# Save unlocked (ValidatePlayerSaveFlag gate removed).
-	run ApplyFreedomUnlocks()
+	# Allow Save & End even during early game / prologue.
+	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
+	System.EventFlags['cLand:ValidateVillageSave'] = true
 	if EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00'):
 		run System_WherearenClose::WherearenClose()
 	elif EventFlowSystemActor.NetIsDreaming():
@@ -176,10 +124,12 @@ local flow Sub_grp_Event24():
 	elif EventFlowSystemActor.IsSharePlay(1):
 		run System_SharePlay_Entry::ExitSharePlay()
 	else:
-		# :020 — Freedom / Save and end
+		# :020 — three choices: Test / Save and end / Keep playing
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
-		switch EventFlowSystemActor.GeneralTalkChoice2():
+		switch EventFlowSystemActor.GeneralTalkChoice3():
 			case 0:
-				run FreedomMenu()
+				run TestMenu()
 			case 1:
 				run DoSaveAndEnd()
+			default:
+				return

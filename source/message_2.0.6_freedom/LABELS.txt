@@ -1,2 +1,2 @@
-020_a=Freedom  020_b=Save & end
-021_a=Profile  021_b=Airport
+020_a=Test  020_b=Save and end  020_c=Keep playing
+013=Freedom with Friends OK.

@@ -1,16 +1,21 @@
-﻿# Freedom with Friends — ACNH 2.0.6 (Yuzu-safe)
+﻿# Freedom with Friends — ACNH 2.0.6
 
 Title ID: 01006F8002326000
 Build ID: 15765149DF53BA41
 
-## Current safe pack
+## Minus menu
 
-RomFS overlays are empty — Tutorial Skip EventFlows / OpeningMovie caused a black screen after the first load on this install.
+Press **Minus (−)**:
+1. **Test** — confirms the mod menu (status message)
+2. **Save and end**
+3. **Keep playing**
 
-| Feature | Status |
-|---|---|
-| Boot with mod on | OK — no romfs overlays |
-| 60 FPS | cheats/15765149DF53BA41.txt (enable BOTH codes) |
-| Tutorial skip / Freedom Minus menu | Not installed (black-screen risk) |
+Also unlocks Save & End earlier in the game when possible.
 
-Cheats only. Do not drop EventFlow packs back in without a clean boot test.
+## Also included
+
+- 60 FPS cheats (`cheats/15765149DF53BA41.txt`) — enable both codes
+
+## Black-screen rollback
+
+Delete `romfs/EventFlow` and `romfs/Message` under this mod folder. Leave cheats enabled.

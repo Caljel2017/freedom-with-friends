@@ -3,10 +3,11 @@ name: Freedom with Friends
 title_id: "01006F8002326000"
 target_version: "2.0.6"
 build_id: "15765149DF53BA41"
-mode: TUTORIAL_SKIP_SAFE
+mode: TUTORIAL_SKIP_NO_RSTB
 romfs:
-  tutorial_skip: EventFlow prologue pack + OpeningMovie + empty RSTB
+  tutorial_skip: EventFlow prologue pack + OpeningMovie
+  removed: empty ResourceSizeTable.srsizetable (0-byte LayeredFS overlay hangs Yuzu after first load)
 notes:
-  - Removed System_GameClose + TalkSys Message overlay (black screen after load).
-  - Freedom Minus menu parked in source/ until clean boot confirmed.
+  - Atmosphere Tutorial Skip ships empty RSTB; on Yuzu that replaces the real table and black-screens.
+  - Freedom Minus menu still parked until boot is clean.
   - Friends must be on 2.0.6.

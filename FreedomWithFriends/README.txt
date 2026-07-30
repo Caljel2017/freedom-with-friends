@@ -1,7 +1,10 @@
 ﻿# Freedom with Friends — ACNH 2.0.6
 
+## Visitor (on someone else’s island)
+
+Minus → first choice = get **one tent** (once). Option disappears after you use it.
+(Label still shows “Save and end” — no custom text overlay.)
+
+## Host / solo
+
 Minus → Save and end / Keep playing (Freedom).
-
-On Minus (your island): tent + housing kit + moving kit go into your inventory. Place the tent from your pockets on your island.
-
-Visiting a friend still will not grant a real resident plot — see docs/LIVE_ON_HOST_ISLAND.md.

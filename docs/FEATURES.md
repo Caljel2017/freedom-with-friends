@@ -1,12 +1,17 @@
 ﻿# Features (ACNH **2.0.6**)
 
-## Minus
+## Visitor tent (multiplayer guest only)
 
-Save and end / Keep playing (Freedom hub).
+On a **friend’s island** (you are the visitor), press **Minus**:
 
-## Tent kits (multiplayer only)
+1. First option (on-screen it still says **Save and end**) → **get one tent** in your pockets  
+2. Second option (**Keep playing**) → normal leave/session menu  
 
-When you press Minus **while in a multiplayer session** (hosting or visiting), pockets get:
-- Tent, housing kit, moving kit
+After you take the tent **once**, that first option is gone for the rest of the visit — Minus goes straight to the leave menu.
 
-Solo / offline Minus does **not** grant kits.
+- Tent **only** (no housing/moving kits)  
+- Hosts / solo play do **not** get this  
+
+## Host / solo Minus
+
+Save and end / Keep playing (Freedom hub) — unchanged.

@@ -1,10 +1,9 @@
 # Freedom with Friends — ACNH 2.0.6 Minus menu (no Message overlay)
-# Symptom fixed: HUD hid / movement stopped but no dialog = Choice3 + TalkSys overlay hang.
-# Use vanilla SYS_CloseMenu :020 with Choice2 only (no romfs/Message).
-# Labels (vanilla): Save and end / Keep playing
-#   case 0 → Save and end
-#   case 1 → Freedom hub (Profile then Fly prompt) — still labeled "Keep playing" in vanilla text
-# B cancel also dismisses (keep playing).
+# Vanilla Choice2 only (Choice3 + TalkSys overlay = blank hang).
+#
+# Host / solo: Save and end / Keep playing (Freedom hub).
+# Visitor: one-time "get tent" (vanilla label = Save and end), then leave menu.
+#   After claiming once (cPlayerTemp:CampInviteRejected), tent option is gone.
 
 flow DreamClose():
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:028', false)
@@ -92,15 +91,34 @@ flow RetryLock():
 		EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
 
 flow Root():
-	# Tent kits only while NetIsConnected (checked inside).
-	run GiveTentKitsIfMultiplayer()
 	if EventFlowSystemActor.NetIsConnected():
 		if EventFlowSystemActor.IsMyVillage():
 			run Sub_grp_Event24()
 		else:
-			run NetClose()
+			run VisitorMinus()
 	else:
 		run Sub_grp_Event24()
+
+# Visitor-only: claim one tent once, then option never shows again this session.
+flow VisitorMinus():
+	if not System.EventFlags['cPlayerTemp:CampInviteRejected']:
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0:
+				run ClaimVisitorTentOnce()
+			case 1:
+				run NetClose()
+	else:
+		run NetClose()
+
+local flow ClaimVisitorTentOnce():
+	System.EventFlags['cPlayer:UpgradePocket30'] = true
+	System.EventFlags['cPlayer:UpgradePocket40'] = true
+	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
+	EventFlowSystemActor.SetItemToPocket(2750, 1)
+	MainNpc.SetDeliveryItemAtRandom(2750, false, 'cVillageRemakePattern', 0)
+	# Hide this option on later Minus presses (visitor session).
+	System.EventFlags['cPlayerTemp:CampInviteRejected'] = true
 
 local flow DoSaveAndEnd():
 	if EventFlowSystemActor.NetIsInviteFriend():
@@ -120,20 +138,6 @@ local flow EditNameAndBirthday():
 local flow GoToAirport():
 	EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
 	EventFlowSystemActor.SystemRequestChangeStage('cFrontOfAirPort', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-
-local flow GiveTentKitsIfMultiplayer():
-	# Only while in a multiplayer session (host with visitors or guest visit).
-	if EventFlowSystemActor.NetIsConnected():
-		System.EventFlags['cPlayer:UpgradePocket30'] = true
-		System.EventFlags['cPlayer:UpgradePocket40'] = true
-		System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
-		System.EventFlags['cLand:RcoEnableBuyHousingKit'] = true
-		EventFlowSystemActor.SetItemToPocket(2750, 1)
-		MainNpc.SetDeliveryItemAtRandom(2750, false, 'cVillageRemakePattern', 0)
-		EventFlowSystemActor.SetItemToPocket(3349, 1)
-		MainNpc.SetDeliveryItemAtRandom(3349, false, 'cVillageRemakePattern', 0)
-		EventFlowSystemActor.SetItemToPocket(5338, 1)
-		MainNpc.SetDeliveryItemAtRandom(5338, false, 'cVillageRemakePattern', 0)
 
 local flow ApplySaveUnlock():
 	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
@@ -170,7 +174,6 @@ local flow ApplyFreedomUnlocks():
 	System.EventFlags['cPlayer:UpgradePocket40'] = true
 	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
 
-# Freedom hub (second Minus choice — vanilla label still says Keep playing).
 flow TestMenu():
 	run ApplyFreedomUnlocks()
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
@@ -192,7 +195,6 @@ local flow Sub_grp_Event24():
 	elif EventFlowSystemActor.IsSharePlay(1):
 		run System_SharePlay_Entry::ExitSharePlay()
 	else:
-		# Vanilla 2-choice dialog — MUST be Choice2 (Choice3 = blank hang without 3-choice MSBT).
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
 		switch EventFlowSystemActor.GeneralTalkChoice2():
 			case 0:

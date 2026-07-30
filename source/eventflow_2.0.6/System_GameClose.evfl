@@ -91,11 +91,10 @@ flow RetryLock():
 		EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
 
 flow Root():
-	if EventFlowSystemActor.NetIsConnected():
-		if EventFlowSystemActor.IsMyVillage():
-			run Sub_grp_Event24()
-		else:
-			run VisitorMinus()
+	# Only true visitors (connected + not own island) get the one-time tent claim.
+	# Solo + host always get the normal close menu.
+	if (EventFlowSystemActor.NetIsConnected()) and (not EventFlowSystemActor.IsMyVillage()):
+		run VisitorMinus()
 	else:
 		run Sub_grp_Event24()
 
@@ -185,15 +184,13 @@ flow TestMenu():
 			run EditNameAndBirthday()
 
 local flow Sub_grp_Event24():
+	# Keep this path minimal — calling missing Wherearen/SharePlay flows hangs Minus
+	# (HUD hides, no dialog) on Yuzu single-player.
 	run ApplySaveUnlock()
-	if EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00'):
-		run System_WherearenClose::WherearenClose()
-	elif EventFlowSystemActor.NetIsDreaming():
+	if EventFlowSystemActor.NetIsDreaming():
 		run DreamClose()
-	elif (EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol01')) or (System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']) or (EventFlowSystemActor.IsPlayerBirthdayRoom()) or ((EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate'])):
+	elif EventFlowSystemActor.IsPlayerBirthdayRoom():
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:019', false)
-	elif EventFlowSystemActor.IsSharePlay(1):
-		run System_SharePlay_Entry::ExitSharePlay()
 	else:
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
 		switch EventFlowSystemActor.GeneralTalkChoice2():

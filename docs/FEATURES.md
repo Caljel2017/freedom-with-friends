@@ -1,17 +1,9 @@
 ﻿# Features (ACNH **2.0.6**)
 
-## Visitor tent (multiplayer guest only)
+## Minus (single-player / host)
 
-On a **friend’s island** (you are the visitor), press **Minus**:
+Save and end / Keep playing (Freedom). Stripped Wherearen/SharePlay branches that hung Minus with no dialog on Yuzu.
 
-1. First option (on-screen it still says **Save and end**) → **get one tent** in your pockets  
-2. Second option (**Keep playing**) → normal leave/session menu  
+## Visitor tent (guest only)
 
-After you take the tent **once**, that first option is gone for the rest of the visit — Minus goes straight to the leave menu.
-
-- Tent **only** (no housing/moving kits)  
-- Hosts / solo play do **not** get this  
-
-## Host / solo Minus
-
-Save and end / Keep playing (Freedom hub) — unchanged.
+Minus → first choice once = get tent; then option disappears.

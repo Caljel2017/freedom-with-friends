@@ -3,11 +3,11 @@ name: Freedom with Friends
 title_id: "01006F8002326000"
 target_version: "2.0.6"
 build_id: "15765149DF53BA41"
-mode: TUTORIAL_SKIP_NO_RSTB
-romfs:
-  tutorial_skip: EventFlow prologue pack + OpeningMovie
-  removed: empty ResourceSizeTable.srsizetable (0-byte LayeredFS overlay hangs Yuzu after first load)
+mode: CHEATS_ONLY_SAFE
+romfs: empty (overlays removed — black screen with mod on)
+cheats: 60 FPS + Animation Speed x0.5
 notes:
-  - Atmosphere Tutorial Skip ships empty RSTB; on Yuzu that replaces the real table and black-screens.
-  - Freedom Minus menu still parked until boot is clean.
+  - Confirmed: mod OFF boots; mod ON black-screened after first load.
+  - Cause: Tutorial Skip EventFlow + OpeningMovie LayeredFS overlays.
+  - Freedom Minus / Tutorial Skip parked in source/ and tools/ backups until a 2.0.6-safe rebuild.
   - Friends must be on 2.0.6.

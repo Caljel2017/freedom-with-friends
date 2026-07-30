@@ -2,20 +2,24 @@
 
 | Feature | Status |
 |---|---|
-| Fast tutorial / new-island start | **Installed** — Tutorial Skip EventFlows + short OpeningMovie |
+| Boot with mod enabled | **Fixed** — all romfs overlays removed |
 | 60 FPS | **Cheats** — enable `60 FPS` + `Animation Speed x0.5` |
-| Minus Freedom menu | Parked — prior Message/GameClose overlays black-screened |
-| Empty RSTB | **Removed** — 0-byte `ResourceSizeTable` hangs Yuzu after first load |
+| Tutorial Skip / Minus Freedom menu | **Off** — EventFlow + Movie black-screened after first load |
 
-## Black-screen fix (2026-07-29)
+## Black-screen fix (confirmed)
 
-1. Removed Message + custom `System_GameClose`
-2. Removed empty `romfs/System/Resource/ResourceSizeTable.srsizetable` (size 0). Atmosphere Tutorial Skip ships this; Yuzu LayeredFS replaces the real RSTB with nothing → hang after the first loading screen.
+With **FreedomWithFriends** enabled, the game hung after the first loading screen.
+With the mod disabled, it booted.
 
-**Quit Yuzu / relaunch ACNH.** You should get past the first load now.
+Removed from `romfs/`:
+- All Tutorial Skip `EventFlow/*.bfevfl`
+- `Movie/OpeningMovie.webm`
+- Empty `ResourceSizeTable` (already removed earlier)
+
+Safe pack = **cheats only** (+ disabled exefs stub). Mod can stay enabled.
 
 ## How to use
 
-1. Enable **FreedomWithFriends**
-2. Prefer a **New game** for Tutorial Skip
-3. Optional 60 FPS cheats (both codes)
+1. Leave **FreedomWithFriends** enabled
+2. Optional: turn on both 60 FPS cheat codes in Yuzu
+3. Play normally (full tutorial until a real save exists)

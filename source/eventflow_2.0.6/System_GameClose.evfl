@@ -122,11 +122,21 @@ local flow GoToAirport():
 local flow ApplySaveUnlock():
 	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
 	System.EventFlags['cLand:ValidateVillageSave'] = true
+	System.EventFlags['cPlayer:UpgradePocket30'] = true
+	System.EventFlags['cPlayer:UpgradePocket40'] = true
+	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
+	System.EventFlags['cLand:RcoEnableBuyHousingKit'] = true
+	# Tent + kits into pockets; delivery mode helps placement prompts
+	EventFlowSystemActor.SetItemToPocket(2750, 1)
+	MainNpc.SetDeliveryItemAtRandom(2750, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.SetItemToPocket(3349, 1)
+	MainNpc.SetDeliveryItemAtRandom(3349, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.SetItemToPocket(5338, 1)
+	MainNpc.SetDeliveryItemAtRandom(5338, false, 'cVillageRemakePattern', 0)
 
 local flow ApplyFreedomUnlocks():
 	run ApplySaveUnlock()
 	System.EventFlags['cPlayer:EnableEmoticonUI'] = true
-	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
 	System.EventFlags['cLand:AirportOpen'] = true
 	System.EventFlags['cPlayer:OdekakeFirstTalk'] = true
 	System.EventFlags['cPlayer:OdekakeTutorial'] = true
@@ -151,21 +161,17 @@ local flow ApplyFreedomUnlocks():
 	System.EventFlags['cPlayer:GetLicenseRiver'] = true
 	System.EventFlags['cPlayer:GetLicenseCliff'] = true
 	System.EventFlags['cPlayer:Activate_WebService'] = true
-	System.EventFlags['cPlayer:UpgradePocket30'] = true
-	System.EventFlags['cPlayer:UpgradePocket40'] = true
 
-# Freedom hub (opened from second Minus choice — vanilla label still says Keep playing).
-# No custom Message overlay: only vanilla single-line / 2-choice dialogs.
+# Freedom hub (second Minus choice — vanilla label still says Keep playing).
 flow TestMenu():
 	run ApplyFreedomUnlocks()
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
-	run EditNameAndBirthday()
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
 	switch EventFlowSystemActor.GeneralTalkChoice2():
 		case 0:
 			run GoToAirport()
 		case 1:
-			return
+			run EditNameAndBirthday()
 
 local flow Sub_grp_Event24():
 	run ApplySaveUnlock()

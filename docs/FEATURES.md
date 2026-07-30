@@ -1,17 +1,16 @@
 ﻿# Features (ACNH **2.0.6**)
 
-## Minus menu fix (blank GUI)
+## Minus
 
-Cause: custom `TalkSys` Message overlay + `Choice3` hid the HUD then never drew a dialog.
+Vanilla **Save and end** / **Keep playing** (Keep playing = Freedom hub).
 
-Fix: **removed Message overlay**; Minus uses vanilla **Save and end / Keep playing** (`Choice2`).
+Every time you open Minus on **your** island, the mod puts in your pockets:
+- **Tent** (placeable housing kit)
+- **Housing kit** (villager plot)
+- **Moving kit** (relocate house)
 
-| Choice (on screen) | What it does |
-|---|---|
-| Save and end | Save & quit |
-| Keep playing | Opens Freedom hub (unlocks + name/birthday, then Save= Fly / Keep= stay) |
-| B cancel | Dismiss |
+Open inventory and use/place the tent on **your** island. This does **not** create a resident tent on someone else’s island while visiting.
 
-Only `romfs/EventFlow/System_GameClose.bfevfl` is installed (no Message).
+## Live as a resident on a friend’s island
 
-Live on host island: `docs/LIVE_ON_HOST_ISLAND.md`
+`docs/LIVE_ON_HOST_ISLAND.md` — second Yuzu profile on the host save.

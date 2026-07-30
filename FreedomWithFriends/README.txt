@@ -1,9 +1,7 @@
 ﻿# Freedom with Friends — ACNH 2.0.6
 
-Minus uses vanilla Save and end / Keep playing (no TalkSys overlay — that caused blank menu).
+Minus → Save and end / Keep playing (Freedom).
 
-- Save and end → save & quit
-- Keep playing → Freedom (profile edit, then optional Fly)
-- B → dismiss
+On Minus (your island): tent + housing kit + moving kit go into your inventory. Place the tent from your pockets on your island.
 
-Live on a friend’s island as a resident: docs/LIVE_ON_HOST_ISLAND.md
+Visiting a friend still will not grant a real resident plot — see docs/LIVE_ON_HOST_ISLAND.md.

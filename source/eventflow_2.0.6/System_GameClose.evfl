@@ -92,6 +92,8 @@ flow RetryLock():
 		EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
 
 flow Root():
+	# Tent kits only while NetIsConnected (checked inside).
+	run GiveTentKitsIfMultiplayer()
 	if EventFlowSystemActor.NetIsConnected():
 		if EventFlowSystemActor.IsMyVillage():
 			run Sub_grp_Event24()
@@ -119,20 +121,23 @@ local flow GoToAirport():
 	EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
 	EventFlowSystemActor.SystemRequestChangeStage('cFrontOfAirPort', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
 
+local flow GiveTentKitsIfMultiplayer():
+	# Only while in a multiplayer session (host with visitors or guest visit).
+	if EventFlowSystemActor.NetIsConnected():
+		System.EventFlags['cPlayer:UpgradePocket30'] = true
+		System.EventFlags['cPlayer:UpgradePocket40'] = true
+		System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
+		System.EventFlags['cLand:RcoEnableBuyHousingKit'] = true
+		EventFlowSystemActor.SetItemToPocket(2750, 1)
+		MainNpc.SetDeliveryItemAtRandom(2750, false, 'cVillageRemakePattern', 0)
+		EventFlowSystemActor.SetItemToPocket(3349, 1)
+		MainNpc.SetDeliveryItemAtRandom(3349, false, 'cVillageRemakePattern', 0)
+		EventFlowSystemActor.SetItemToPocket(5338, 1)
+		MainNpc.SetDeliveryItemAtRandom(5338, false, 'cVillageRemakePattern', 0)
+
 local flow ApplySaveUnlock():
 	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
 	System.EventFlags['cLand:ValidateVillageSave'] = true
-	System.EventFlags['cPlayer:UpgradePocket30'] = true
-	System.EventFlags['cPlayer:UpgradePocket40'] = true
-	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
-	System.EventFlags['cLand:RcoEnableBuyHousingKit'] = true
-	# Tent + kits into pockets; delivery mode helps placement prompts
-	EventFlowSystemActor.SetItemToPocket(2750, 1)
-	MainNpc.SetDeliveryItemAtRandom(2750, false, 'cVillageRemakePattern', 0)
-	EventFlowSystemActor.SetItemToPocket(3349, 1)
-	MainNpc.SetDeliveryItemAtRandom(3349, false, 'cVillageRemakePattern', 0)
-	EventFlowSystemActor.SetItemToPocket(5338, 1)
-	MainNpc.SetDeliveryItemAtRandom(5338, false, 'cVillageRemakePattern', 0)
 
 local flow ApplyFreedomUnlocks():
 	run ApplySaveUnlock()
@@ -161,6 +166,9 @@ local flow ApplyFreedomUnlocks():
 	System.EventFlags['cPlayer:GetLicenseRiver'] = true
 	System.EventFlags['cPlayer:GetLicenseCliff'] = true
 	System.EventFlags['cPlayer:Activate_WebService'] = true
+	System.EventFlags['cPlayer:UpgradePocket30'] = true
+	System.EventFlags['cPlayer:UpgradePocket40'] = true
+	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
 
 # Freedom hub (second Minus choice — vanilla label still says Keep playing).
 flow TestMenu():

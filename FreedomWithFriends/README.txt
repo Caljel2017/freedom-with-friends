@@ -7,13 +7,16 @@ Build ID: 15765149DF53BA41
 
 1. Save end. / 2. Test (Profile + Fly) / 3. Keep playing
 
-## Visiting friends
+If Minus was frozen: reinstall this pack (gymnastics grant removed from open).
 
-Visitor tent + full Tom Nook / Isabelle / Nook Stop as a **guest** are **not** something LayeredFS can grant.
-`exefs/FreedomWithFriends_2.0.6.pchtxt.disabled` is a stub for future owner patches — leave it disabled.
+## Live on a friend’s island
 
-Real tent: be a **resident** on the host save (not a Dodo visit). Details: docs/SHARED_OWNER.md
+Real tent + Tom Nook / Isabelle / Nook Stop = become a **resident** on their save (second Yuzu profile on the host PC).
 
-## 60 FPS
+```powershell
+.\scripts\Prepare-SecondResident.ps1
+```
 
-Enable both cheats in cheats/15765149DF53BA41.txt
+Details: docs/LIVE_ON_HOST_ISLAND.md
+
+Dodo visits stay guests — no personal tent that way.

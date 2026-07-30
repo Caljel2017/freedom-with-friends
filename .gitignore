@@ -21,3 +21,6 @@ source/romfs_dump/
 tools/ACNH-Tutorial-Skip-ref/
 tools/tutorial-skip-release/
 tools/*.zip
+
+backups/
+

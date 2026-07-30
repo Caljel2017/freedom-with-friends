@@ -1,9 +1,7 @@
-# Freedom with Friends — ACNH 2.0.6 Minus menu
-# Minus → Save and end / Test (Freedom hub) / Keep playing
-# Test hub → Profile (name+birthday) / Fly (airport)
-# On Minus/Test: unlock save, airport/Orville flags, emote UI, main menus
-# Labels: TalkSys SYS_CloseMenu :020 / :021 (Message overlay)
-# Do NOT ship Tutorial Skip prologue EventFlows or empty RSTB with this file.
+# Freedom with Friends — ACNH 2.0.6 Minus menu (boot-safe)
+# Minus → Save and end / Test / Keep playing
+# Test → Profile (name+birthday) / Fly (airport)
+# Keep ApplyFreedomUnlocks light: NO GetGymnasticsEmoticon on open (was hanging Minus).
 
 flow DreamClose():
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:028', false)
@@ -91,12 +89,11 @@ flow RetryLock():
 		EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
 
 flow Root():
+	# Own island always gets Freedom Minus menu (even if friends are visiting).
+	# Guests on someone else's island still get the leave-session NetClose flow.
 	if EventFlowSystemActor.NetIsConnected():
 		if EventFlowSystemActor.IsMyVillage():
-			if EventFlowSystemActor.NetHasVisitor():
-				run NetClose()
-			else:
-				run Sub_grp_Event24()
+			run Sub_grp_Event24()
 		else:
 			run NetClose()
 	else:
@@ -117,15 +114,17 @@ local flow EditNameAndBirthday():
 	EventFlowSystemActor.UIDateHandling('cOpeningBirthday')
 	EventFlowSystemActor.SaveSetFromUIResult('cBirthDay')
 
-# Warp near Orville / airport apron.
 local flow GoToAirport():
 	EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
 	EventFlowSystemActor.SystemRequestChangeStage('cFrontOfAirPort', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
 
-# Session unlocks that were blocked on pure 1.0 / missing from the minimal Test ping.
-local flow ApplyFreedomUnlocks():
+# Light unlocks only — heavy grants moved to Test → so Minus always opens.
+local flow ApplySaveUnlock():
 	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
 	System.EventFlags['cLand:ValidateVillageSave'] = true
+
+local flow ApplyFreedomUnlocks():
+	run ApplySaveUnlock()
 	System.EventFlags['cPlayer:EnableEmoticonUI'] = true
 	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
 	System.EventFlags['cLand:AirportOpen'] = true
@@ -154,9 +153,7 @@ local flow ApplyFreedomUnlocks():
 	System.EventFlags['cPlayer:Activate_WebService'] = true
 	System.EventFlags['cPlayer:UpgradePocket30'] = true
 	System.EventFlags['cPlayer:UpgradePocket40'] = true
-	EventFlowSystemActor.GetGymnasticsEmoticon()
 
-# Freedom hub (Minus → Test): Profile / Fly
 flow TestMenu():
 	run ApplyFreedomUnlocks()
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:021', false)
@@ -167,7 +164,7 @@ flow TestMenu():
 			run GoToAirport()
 
 local flow Sub_grp_Event24():
-	run ApplyFreedomUnlocks()
+	run ApplySaveUnlock()
 	if EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00'):
 		run System_WherearenClose::WherearenClose()
 	elif EventFlowSystemActor.NetIsDreaming():
@@ -177,7 +174,6 @@ local flow Sub_grp_Event24():
 	elif EventFlowSystemActor.IsSharePlay(1):
 		run System_SharePlay_Entry::ExitSharePlay()
 	else:
-		# :020 — Save and end / Test / Keep playing
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
 		switch EventFlowSystemActor.GeneralTalkChoice3():
 			case 0:

@@ -1,35 +1,43 @@
 # Limits — ACNH **2.0.6** (Yuzu / LayeredFS)
 
-Things that **still cannot** be done with this mod style, even after updating past 1.0:
+## Visitor tent on a friend’s island
+
+**Impossible** for Dodo / local-play **guests**. Tents and houses are resident plots on the **host save** (max **8** player characters). Visiting does not create a plot for you.
+
+**Closest real tent:** host adds you as another **resident character** on their save (in-game / NHSE). You then play that character on that save — you are not a wireless visitor.
+
+## Tom Nook / Isabelle “edit everything” + Nook Stop as a visitor
+
+**Not available yet.** Those menus check island owner / resident in the game binary. That needs a verified **exefs** patch for Build ID `15765149DF53BA41`.
+
+Stub (disabled on purpose): `FreedomWithFriends/exefs/FreedomWithFriends_2.0.6.pchtxt.disabled`  
+Guessed offsets are **not** filled — enabling fakes risks crashes and save desync.
 
 ## 20 villagers
 
-**Impossible.** Engine + save allocate **10** villager slots. No EventFlow / cheat / NHSE option expands that to 20.
-
-## Visitor house on a friend’s island (Dodo / local visit)
-
-**Not a real resident plot.** Houses belong to residents on the **host save**. Guests cannot get a permanent house via LayeredFS while visiting.
+**Impossible.** Engine max is **10**.
 
 ## Silent auto-join host island on boot
 
-**Impossible** via LayeredFS alone. Still: Orville → Via local play (+ Hamachi / ldn_mitm). See `CONNECTIVITY.md`.
+**Impossible** via LayeredFS alone. Still Orville → Via local play (+ Hamachi). See `CONNECTIVITY.md`.
 
 ## Full Tutorial Skip EventFlow pack on this Yuzu install
 
-**Off by choice.** The prologue EventFlow + OpeningMovie pack black-screened after the first load here. Freedom features are delivered through the Minus menu instead.
+**Off.** Prologue EventFlow + OpeningMovie black-screened after the first load here. Freedom features use the Minus menu instead.
 
 ## Every reaction on day one
 
-Emote **UI** + gymnastics set are granted from Minus / Test. Filling the entire reaction wheel still needs per-reaction IDs / NHSE after you have a real save.
+Emote UI + gymnastics set from Minus / Test. Full reaction wheel still needs NHSE / mapped IDs after you have a save.
 
 ---
 
-## Now possible on 2.0.6 (this pack)
+## What this pack **does** on 2.0.6
 
 | Feature | How |
 |---|---|
 | 60 FPS | Cheats — enable **both** `60 FPS` + `Animation Speed x0.5` |
-| Minus Save & End early | `System_GameClose` save unlock |
-| Minus → **Test** Freedom hub | Profile (name + birthday) / Fly to airport |
+| Minus Save & End early | `System_GameClose` |
+| Minus → Test → Profile / Fly | Name+birthday, warp to airport |
 | Orville / airport / designer / main UI flags | Set when you open Minus or Test |
-| Emote UI + gymnastics reactions | `EnableEmoticonUI` + `GetGymnasticsEmoticon` |
+| Emote UI + gymnastics | From Minus / Test |
+| Shared-owner visitor powers | **Stub only** until real 2.0.6 offsets exist |

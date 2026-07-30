@@ -5,25 +5,15 @@ Build ID: 15765149DF53BA41
 
 ## Minus (−)
 
-1. **Save end.** — Save and end
-2. **Test** — Freedom hub
-3. **Keep playing**
+1. Save end. / 2. Test (Profile + Fly) / 3. Keep playing
 
-### Test hub
+## Visiting friends
 
-1. **Edit profile.** — name + birthday
-2. **Fly.** — warp to airport / Orville
+Visitor tent + full Tom Nook / Isabelle / Nook Stop as a **guest** are **not** something LayeredFS can grant.
+`exefs/FreedomWithFriends_2.0.6.pchtxt.disabled` is a stub for future owner patches — leave it disabled.
 
-Opening Minus or Test also unlocks: early save, airport/Orville flags, Island Designer licenses, main menus, emote UI + gymnastics reactions.
+Real tent: be a **resident** on the host save (not a Dodo visit). Details: docs/SHARED_OWNER.md
 
 ## 60 FPS
 
-Enable **both** cheats in `cheats/15765149DF53BA41.txt`.
-
-## Still impossible
-
-20 villagers · visitor house on a friend’s island · silent auto-join — see `docs/HARD_LIMITS.md`.
-
-## Rollback
-
-Delete `romfs/EventFlow` and `romfs/Message` if black screen returns.
+Enable both cheats in cheats/15765149DF53BA41.txt

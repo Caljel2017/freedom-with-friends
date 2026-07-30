@@ -1,0 +1,43 @@
+@nsobid-15765149DF53BA41
+# Freedom with Friends — ACNH 2.0.6 shared-owner / visitor permissions
+# Build ID: 15765149DF53BA41
+#
+# GOAL (Dodo / local-play / Hamachi visit): every client treats the local player
+# as island owner/resident for:
+#   - Nook Stop / Miles redemption
+#   - Tom Nook / Isabelle island-edit menus
+#   - terraforming / place / dig while visiting
+#   - mailbox against the HOST island
+#
+# NOT POSSIBLE via exefs alone:
+#   - spawning a real visitor tent/house plot on the host save
+#     (houses = resident slots on that save, max 8 players)
+#
+# STATUS: STUB — do not enable guessed offsets (crash / desync / save risk).
+# Rename off .disabled only after real 2.0.6 ARM offsets are filled.
+# EVERY multiplayer client must use the same patch set + same game version.
+
+@flag print_values
+@flag offset_shift 0x100
+
+# @enabled Force IsIslandOwner / resident true while visiting
+# <offset> mov w0, #1
+# <offset> ret
+
+# @enabled Allow Nook Stop / Miles machine as visitor
+# <offset> nop
+
+# @enabled Allow Tom Nook / Isabelle full resident menus as visitor
+# <offset> nop
+
+# @enabled Allow mailbox open / villager mail on host island
+# <offset> nop
+
+# @enabled Allow host terraform / place while visitors present
+# <offset> nop
+
+# @enabled Allow visitor terraform / place / dig
+# <offset> nop
+
+# @enabled Relax best-friend tool locks
+# <offset> nop

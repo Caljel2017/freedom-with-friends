@@ -1,123 +1,28 @@
-# Freedom with Friends — ACNH 2.0.6 Minus menu (no Message overlay)
-# Vanilla Choice2 only (Choice3 + TalkSys overlay = blank hang).
-#
-# Host / solo: Save and end / Keep playing (Freedom hub).
-# Visitor: one-time "get tent" (vanilla label = Save and end), then leave menu.
-#   After claiming once (cPlayerTemp:CampInviteRejected), tent option is gone.
-
-flow DreamClose():
-	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:028', false)
-	switch EventFlowSystemActor.GeneralTalkChoice3():
-		case 0:
-			EventFlowSystemActor.MessageSuspend()
-			run SNPC_tap_02_InDreaming::Jumpup()
-		case 1:
-			if EventFlowSystemActor.NetIsPublicDream():
-				EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:027', true)
-			else:
-				run ReportDream()
-		default:
-			return
-
-flow LocalClose():
-	if EventFlowSystemActor.NetIsInviteFriend():
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:001', true)
-		if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-			EventFlowSystemActor.UIShopMoneyDisappear()
-			EventFlowSystemActor.UIMenuProfileOthersHandling()
-		elif EventFlowSystemActor.NetCanRequestLeave():
-			run RetryLock()
-		else:
-			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:007', false)
-	else:
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:004', true)
-		if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-			EventFlowSystemActor.UIShopMoneyDisappear()
-			EventFlowSystemActor.UIMenuProfileOthersHandling()
-		elif EventFlowSystemActor.NetCanRequestLeave():
-			EventFlowSystemActor.MessageLockNext(1)
-			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:005', false)
-			EventFlowSystemActor.NetDemoLock(1)
-			EventFlowSystemActor.MessageUnlockNext()
-			if EventFlowSystemActor.CheckErrorType(2):
-				EventFlowSystemActor.MessageLockNext(2)
-				EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:007', false)
-				EventFlowSystemActor.NetForceQuitSession()
-				EventFlowSystemActor.MessageUnlockNext()
-				EventFlowSystemActor.MessageSuspend()
-				if not EventFlowSystemActor.MessageUseBCancel():
-					EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
-			else:
-				EventFlowSystemActor.MessageSuspend()
-				EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
-		else:
-			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:007', false)
-
-flow NetClose():
-	if EventFlowSystemActor.NetMode() in (0, 1):
-		run LocalClose()
-	else:
-		run System_InetClose::InetClose()
-
-flow ReportDream():
-	EventFlowSystemActor.MessageSuspend()
-	EventFlowSystemActor.NetCaptureScreenshot()
-	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:025', false)
-	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-		EventFlowSystemActor.UIIllegalReportHandling(8)
-		if EventFlowSystemActor.UIIllegalReportResult():
-			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:026', true)
-			EventFlowSystemActor.MiniGameSilentCancel()
-			EventFlowSystemActor.StopMeasurePlayTime('cDreaming')
-			EventFlowSystemActor.FadeOut('', '', 'cBlack', 1.0, 1.0, true)
-			EventFlowSystemActor.NetExitDream(true)
-			EventFlowSystemActor.SystemRequestChangeStage('cDreamDemo', 'cDream', 'cDream', 'cBlack', 1.0, 1.0)
-
-flow RetryLock():
-	EventFlowSystemActor.MessageLockNext(1)
-	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:006', false)
-	EventFlowSystemActor.NetDemoLock(2)
-	EventFlowSystemActor.MessageUnlockNext()
-	if EventFlowSystemActor.CheckErrorType(2):
-		EventFlowSystemActor.MessageLockNext(2)
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:008', false)
-		EventFlowSystemActor.NetForceQuitSession()
-		EventFlowSystemActor.MessageUnlockNext()
-		EventFlowSystemActor.MessageSuspend()
-		if not EventFlowSystemActor.MessageUseBCancel():
-			EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
-	else:
-		EventFlowSystemActor.MessageSuspend()
-		EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
+# Freedom with Friends — ACNH 2.0.6 Minus (minimal, Yuzu-safe)
+# No Message overlay. No external EventFlow calls (Wherearen/SharePlay/InetClose).
+# Choice2 only on vanilla TalkSys/SYS_CloseMenu:020.
 
 flow Root():
-	# Only true visitors (connected + not own island) get the one-time tent claim.
-	# Solo + host always get the normal close menu.
-	if (EventFlowSystemActor.NetIsConnected()) and (not EventFlowSystemActor.IsMyVillage()):
-		run VisitorMinus()
-	else:
-		run Sub_grp_Event24()
-
-# Visitor-only: claim one tent once, then option never shows again this session.
-flow VisitorMinus():
-	if not System.EventFlags['cPlayerTemp:CampInviteRejected']:
+	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
+	System.EventFlags['cLand:ValidateVillageSave'] = true
+	# Visitor on someone else's island: one-time tent claim as first choice.
+	if (EventFlowSystemActor.NetIsConnected()) and (not EventFlowSystemActor.IsMyVillage()) and (not System.EventFlags['cPlayerTemp:CampInviteRejected']):
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
 		switch EventFlowSystemActor.GeneralTalkChoice2():
 			case 0:
-				run ClaimVisitorTentOnce()
+				System.EventFlags['cPlayer:UpgradePocket30'] = true
+				System.EventFlags['cPlayer:UpgradePocket40'] = true
+				EventFlowSystemActor.SetItemToPocket(2750, 1)
+				System.EventFlags['cPlayerTemp:CampInviteRejected'] = true
 			case 1:
-				run NetClose()
+				return
 	else:
-		run NetClose()
-
-local flow ClaimVisitorTentOnce():
-	System.EventFlags['cPlayer:UpgradePocket30'] = true
-	System.EventFlags['cPlayer:UpgradePocket40'] = true
-	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
-	EventFlowSystemActor.SetItemToPocket(2750, 1)
-	MainNpc.SetDeliveryItemAtRandom(2750, false, 'cVillageRemakePattern', 0)
-	# Hide this option on later Minus presses (visitor session).
-	System.EventFlags['cPlayerTemp:CampInviteRejected'] = true
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0:
+				run DoSaveAndEnd()
+			case 1:
+				run FreedomHub()
 
 local flow DoSaveAndEnd():
 	if EventFlowSystemActor.NetIsInviteFriend():
@@ -125,76 +30,30 @@ local flow DoSaveAndEnd():
 	EventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'Root', false, false, false)
 	EventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
 
-local flow EditNameAndBirthday():
-	EventFlowSystemActor.SoundDuckingOn(41)
-	EventFlowSystemActor.UISoftwareKeyboardHandling('cName', true)
-	EventFlowSystemActor.SoundDuckingOff(41)
-	EventFlowSystemActor.SaveSetFromUIResult('cPlayerName')
-	EventFlowSystemActor.SetTagFromUIResult('cPlayerNameNoGender', 0)
-	EventFlowSystemActor.UIDateHandling('cOpeningBirthday')
-	EventFlowSystemActor.SaveSetFromUIResult('cBirthDay')
-
-local flow GoToAirport():
-	EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-	EventFlowSystemActor.SystemRequestChangeStage('cFrontOfAirPort', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-
-local flow ApplySaveUnlock():
-	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
-	System.EventFlags['cLand:ValidateVillageSave'] = true
-
-local flow ApplyFreedomUnlocks():
-	run ApplySaveUnlock()
+flow FreedomHub():
 	System.EventFlags['cPlayer:EnableEmoticonUI'] = true
+	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
 	System.EventFlags['cLand:AirportOpen'] = true
 	System.EventFlags['cPlayer:OdekakeFirstTalk'] = true
 	System.EventFlags['cPlayer:OdekakeTutorial'] = true
 	System.EventFlags['cPlayer:PcMaingameStart'] = true
-	System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
-	System.EventFlags['cLand:VillageDaysCount'] = 3
 	System.EventFlags['cPlayer:PlayerMainUImenuEnable'] = true
-	System.EventFlags['cPlayer:PlayerEnableEating'] = true
-	System.EventFlags['cPlayer:MainUiClockEnable'] = true
-	System.EventFlags['cPlayer:MainmenuEncyclopedia'] = true
-	System.EventFlags['cPlayer:MainmenuCall'] = true
-	System.EventFlags['cPlayer:MainmenuMap'] = true
-	System.EventFlags['cPlayer:MainmenuMydesign'] = true
-	System.EventFlags['cPlayer:MainmenuBank'] = true
-	System.EventFlags['cPlayer:MainmenuOnlineShopping'] = true
-	System.EventFlags['cPlayer:MainmenuAchievement'] = true
-	System.EventFlags['cPlayer:MainmenuFriendList'] = true
-	System.EventFlags['cPlayer:FriendListMainSwitch'] = true
-	System.EventFlags['cPlayer:MainmenuChatLog'] = true
-	System.EventFlags['cPlayer:MainmenuTips'] = true
 	System.EventFlags['cPlayer:MainmenuConstructLicense'] = true
 	System.EventFlags['cPlayer:GetLicenseRiver'] = true
 	System.EventFlags['cPlayer:GetLicenseCliff'] = true
-	System.EventFlags['cPlayer:Activate_WebService'] = true
 	System.EventFlags['cPlayer:UpgradePocket30'] = true
 	System.EventFlags['cPlayer:UpgradePocket40'] = true
-	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
-
-flow TestMenu():
-	run ApplyFreedomUnlocks()
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
 	switch EventFlowSystemActor.GeneralTalkChoice2():
 		case 0:
-			run GoToAirport()
+			EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+			EventFlowSystemActor.SystemRequestChangeStage('cFrontOfAirPort', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
 		case 1:
-			run EditNameAndBirthday()
-
-local flow Sub_grp_Event24():
-	# Keep this path minimal — calling missing Wherearen/SharePlay flows hangs Minus
-	# (HUD hides, no dialog) on Yuzu single-player.
-	run ApplySaveUnlock()
-	if EventFlowSystemActor.NetIsDreaming():
-		run DreamClose()
-	elif EventFlowSystemActor.IsPlayerBirthdayRoom():
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:019', false)
-	else:
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
-		switch EventFlowSystemActor.GeneralTalkChoice2():
-			case 0:
-				run DoSaveAndEnd()
-			case 1:
-				run TestMenu()
+			EventFlowSystemActor.SoundDuckingOn(41)
+			EventFlowSystemActor.UISoftwareKeyboardHandling('cName', true)
+			EventFlowSystemActor.SoundDuckingOff(41)
+			EventFlowSystemActor.SaveSetFromUIResult('cPlayerName')
+			EventFlowSystemActor.SetTagFromUIResult('cPlayerNameNoGender', 0)
+			EventFlowSystemActor.UIDateHandling('cOpeningBirthday')
+			EventFlowSystemActor.SaveSetFromUIResult('cBirthDay')

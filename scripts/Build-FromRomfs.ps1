@@ -48,11 +48,12 @@ foreach ($f in $needed) {
     }
 }
 
-# Ensure RSTB disable exists for emulator LayeredFS comfort
-$rstbDir = Join-Path $out "System\Resource"
-New-Item -ItemType Directory -Force -Path $rstbDir | Out-Null
-$rstb = Join-Path $rstbDir "ResourceSizeTable.srsizetable"
-if (-not (Test-Path $rstb)) {
-    New-Item -ItemType File -Force -Path $rstb | Out-Null
+# Do NOT ship an empty ResourceSizeTable.srsizetable.
+# Atmosphere Tutorial Skip uses a 0-byte RSTB; on Yuzu LayeredFS that replaces
+# the real table and black-screens after the first loading screen.
+$rstb = Join-Path $out "System\Resource\ResourceSizeTable.srsizetable"
+if (Test-Path $rstb) {
+    Remove-Item -Force $rstb
+    Write-Host "  removed empty/overlay RSTB (unsafe on Yuzu)"
 }
 Write-Host "Done. Compile edited EVFL before relying on dump copies as final."

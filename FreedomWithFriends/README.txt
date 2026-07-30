@@ -3,19 +3,16 @@
 Title ID: 01006F8002326000
 Build ID: 15765149DF53BA41
 
-## Minus menu
+## Minus menu (order)
 
-Press **Minus (−)**:
-1. **Test** — confirms the mod menu (status message)
-2. **Save and end**
+1. **Save end.** — Save and end
+2. **Test** — mod status ping
 3. **Keep playing**
 
-Also unlocks Save & End earlier in the game when possible.
+## Also
 
-## Also included
+- 60 FPS cheats in `cheats/15765149DF53BA41.txt` (enable both)
 
-- 60 FPS cheats (`cheats/15765149DF53BA41.txt`) — enable both codes
+## Rollback
 
-## Black-screen rollback
-
-Delete `romfs/EventFlow` and `romfs/Message` under this mod folder. Leave cheats enabled.
+Delete `romfs/EventFlow` and `romfs/Message` if the game black-screens.

@@ -2,19 +2,17 @@
 
 | Feature | Status |
 |---|---|
-| Minus → **Test** / Save and end / Keep playing | **Installed** |
+| Minus → Save and end / **Test** / Keep playing | **Installed** |
 | Save unlock (early Minus save) | **Installed** via GameClose |
 | 60 FPS | **Cheats** — enable both codes |
 | Tutorial Skip prologue pack | **Off** — black-screened on this Yuzu install |
 
-## Minus menu
+## Minus menu order
 
-`System_GameClose` + TalkSys label overlay only (no Tutorial Skip EventFlows, no empty RSTB).
-
-**Test** shows a short “Freedom with Friends OK.” ping — expand later.
+1. **Save end.** (Save and end — short label slot)
+2. **Test**
+3. **Keep playing**
 
 ## Rollback
 
-If the game black-screens after the first load again, delete:
-- `romfs/EventFlow/System_GameClose.bfevfl`
-- `romfs/Message/TalkSys_USen.sarc.zs`
+If black screen after first load, delete `romfs/EventFlow` and `romfs/Message`.

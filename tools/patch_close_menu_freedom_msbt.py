@@ -123,11 +123,12 @@ def main():
 
     data, labels, entries, base = parse(out)
     print("Patching Freedom labels...")
-    # :020 already has three choices in TSkip MSBT (budgets: 9 / 13 / 13).
-    # EventFlow Choice3: 0=Test, 1=Save and end, 2=Keep playing
-    patch_by_name(data, labels, entries, "020_a", "Test.")
-    # 020_b / 020_c already "Save and end." / "Keep playing." in TSkip — leave them.
-    print("  020_b/020_c: leave TSkip defaults (Save and end. / Keep playing.)")
+    # :020 budgets: 020_a=9, 020_b=13, 020_c=13
+    # Order: Save and end / Test / Keep playing  (Test directly above Keep playing)
+    patch_by_name(data, labels, entries, "020_a", "Save end.")  # 9-char slot (means Save and end)
+    patch_by_name(data, labels, entries, "020_b", "Test.")
+    # 020_c already "Keep playing." in TSkip
+    print("  020_c: leave TSkip default (Keep playing.)")
 
     try:
         patch_by_name(data, labels, entries, "013", "Freedom with Friends OK.")
@@ -136,7 +137,7 @@ def main():
 
     out.write_bytes(data)
     (out.parent / "LABELS.txt").write_text(
-        "020_a=Test  020_b=Save and end  020_c=Keep playing\n013=Freedom with Friends OK.\n",
+        "020_a=Save end. (Save and end)  020_b=Test  020_c=Keep playing\n013=Freedom with Friends OK.\n",
         encoding="utf-8",
     )
     print("Wrote", out)

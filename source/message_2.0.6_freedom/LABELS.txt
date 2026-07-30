@@ -1,2 +1,2 @@
-020_a=Test  020_b=Save and end  020_c=Keep playing
+020_a=Save end. (Save and end)  020_b=Test  020_c=Keep playing
 013=Freedom with Friends OK.

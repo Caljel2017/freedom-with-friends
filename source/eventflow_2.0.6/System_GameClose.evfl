@@ -124,12 +124,14 @@ local flow Sub_grp_Event24():
 	elif EventFlowSystemActor.IsSharePlay(1):
 		run System_SharePlay_Entry::ExitSharePlay()
 	else:
-		# :020 — three choices: Test / Save and end / Keep playing
+		# :020 — Save and end / Test / Keep playing (Test above Keep playing)
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
 		switch EventFlowSystemActor.GeneralTalkChoice3():
 			case 0:
-				run TestMenu()
-			case 1:
 				run DoSaveAndEnd()
+			case 1:
+				run TestMenu()
+			case 2:
+				return
 			default:
 				return

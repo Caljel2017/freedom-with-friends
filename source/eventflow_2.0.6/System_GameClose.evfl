@@ -133,5 +133,3 @@ local flow Sub_grp_Event24():
 				run TestMenu()
 			case 2:
 				return
-			default:
-				return

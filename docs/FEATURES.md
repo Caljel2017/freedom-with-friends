@@ -1,25 +1,21 @@
-# Features (ACNH **2.0.6** · BID `15765149DF53BA41`)
+﻿# Features (ACNH **2.0.6** · BID `15765149DF53BA41`)
 
 | Feature | Status |
 |---|---|
 | Fast tutorial / new-island start | **Installed** — Tutorial Skip v0.2 |
-| Minus → **Freedom** menu | **Installed** — Profile (name/birthday) + Fly to airport |
-| Minus → **Save & end** anytime | **Installed** — save gate removed + unlock flags |
-| Teleport near Orville | **Installed** — Freedom → **Fly** (`cFrontOfAirPort`) |
-| Airport / phone / terraform flags | **Installed** — applied when Minus opens |
-| Emote UI + gymnastics set | **Installed** — on Minus open |
-| 60 FPS | **Cheats** — enable `60 FPS` + `Animation Speed x0.5` together |
-| All villager reactions | Partial — UI on; full wheel still NHSE / mapped IDs |
-| 20 villagers | **Impossible** — max 10 |
-| Visitor house on friend island | **Impossible** via LayeredFS |
+| 60 FPS | **Cheats** — enable `60 FPS` + `Animation Speed x0.5` |
+| Minus Freedom menu (save / profile / fly) | **Removed for now** — Message + GameClose caused black screen after load |
+| Terraforming unlock flags | Via Tutorial Skip after tents |
+
+## Black-screen fix (2026-07-29)
+
+Removed `romfs/Message/TalkSys_USen.sarc.zs` and `romfs/EventFlow/System_GameClose.bfevfl`.
+Safe pack = Tutorial Skip EventFlows + short OpeningMovie + empty RSTB only.
+
+**Quit Yuzu completely**, then relaunch ACNH. If it still black-screens, say so.
 
 ## How to use
 
-1. Enable **FreedomWithFriends** in Yuzu for ACNH 2.0.6.
-2. **New game** for Tutorial Skip (name → tents → sleep).
-3. Press **Minus**:
-   - **Freedom** → **Profile** (name + birthday) or **Fly** (airport)
-   - **Save & end**
-4. Optional: Properties → Cheats → both 60 FPS codes.
-
-If black screen: delete `romfs\EventFlow\System_GameClose.bfevfl` and `romfs\Message` first, keep Tutorial Skip EventFlows, retest.
+1. Enable **FreedomWithFriends**
+2. **New game** for Tutorial Skip
+3. Optional 60 FPS cheats (both codes)

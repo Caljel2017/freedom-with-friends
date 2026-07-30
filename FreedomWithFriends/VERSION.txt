@@ -1,22 +1,12 @@
-# Pack contents version
+﻿# Pack contents version
 name: Freedom with Friends
 title_id: "01006F8002326000"
 target_version: "2.0.6"
 build_id: "15765149DF53BA41"
-mode: TUTORIAL_SKIP_PLUS_FREEDOM_MENU
+mode: TUTORIAL_SKIP_SAFE
 romfs:
-  tutorial_skip: EventFlow prologue pack + OpeningMovie + RSTB
-  freedom_menu: System_GameClose.bfevfl (Minus → Freedom / Save)
-  messages: Message/TalkSys_USen.sarc.zs (Freedom / Profile / Fly labels)
-cheats:
-  - 15765149DF53BA41.txt  # 60 FPS + Animation Speed x0.5
-minus_menu:
-  - Freedom → Profile (name + birthday)
-  - Freedom → Fly (warp to airport / Orville area)
-  - Save & end (always allowed; unlock flags applied on open)
-  - Session unlocks: airport, emote UI, phone apps, terraform licenses, etc.
+  tutorial_skip: EventFlow prologue pack + OpeningMovie + empty RSTB
 notes:
-  - Friends must be on 2.0.6 for multiplayer.
-  - Start a NEW game for Tutorial Skip.
-  - Full villager reaction list still needs NHSE; gymnastics emotes granted on Minus open.
-  - Visitor houses / 20 villagers still impossible.
+  - Removed System_GameClose + TalkSys Message overlay (black screen after load).
+  - Freedom Minus menu parked in source/ until clean boot confirmed.
+  - Friends must be on 2.0.6.

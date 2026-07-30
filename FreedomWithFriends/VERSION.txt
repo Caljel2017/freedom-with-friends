@@ -3,14 +3,20 @@ name: Freedom with Friends
 title_id: "01006F8002326000"
 target_version: "2.0.6"
 build_id: "15765149DF53BA41"
-mode: TUTORIAL_SKIP_2_0_6
+mode: TUTORIAL_SKIP_PLUS_FREEDOM_MENU
 romfs:
-  source: ACNH Tutorial Skip v0.2 (ShrineFox) — built for modern / 2.0.x
-  includes: EventFlow prologue pack + short OpeningMovie + empty RSTB
+  tutorial_skip: EventFlow prologue pack + OpeningMovie + RSTB
+  freedom_menu: System_GameClose.bfevfl (Minus → Freedom / Save)
+  messages: Message/TalkSys_USen.sarc.zs (Freedom / Profile / Fly labels)
 cheats:
   - 15765149DF53BA41.txt  # 60 FPS + Animation Speed x0.5
+minus_menu:
+  - Freedom → Profile (name + birthday)
+  - Freedom → Fly (warp to airport / Orville area)
+  - Save & end (always allowed; unlock flags applied on open)
+  - Session unlocks: airport, emote UI, phone apps, terraform licenses, etc.
 notes:
-  - Retargeted from 1.0 after user updated. Old 1.0 EventFlows removed.
-  - Friends must also be on 2.0.6 for multiplayer.
-  - Start a NEW game for Tutorial Skip to apply.
-  - Enable 60 FPS and Animation x0.5 together in Yuzu Cheats.
+  - Friends must be on 2.0.6 for multiplayer.
+  - Start a NEW game for Tutorial Skip.
+  - Full villager reaction list still needs NHSE; gymnastics emotes granted on Minus open.
+  - Visitor houses / 20 villagers still impossible.
